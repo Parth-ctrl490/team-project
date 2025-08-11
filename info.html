@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Animated Reviews — Submit a Review</title>
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --glass: rgba(255,255,255,0.04);
+      --accent:#ff7a59; --muted:#9aa4b2; --success:#2ecc71;
+      --radius:18px; --glass-2: rgba(255,255,255,0.03);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071124 0%, #07172a 60%);color:#e6eef8}
+
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px}
+
+    .card{
+      width:980px;max-width:96%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);padding:28px;display:grid;grid-template-columns:520px 1fr;gap:24px;
+      box-shadow: 0 10px 40px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.03);
+      transform: translateY(10px);opacity:0;animation:cardIn .7s ease-out .12s forwards
+    }
+    @keyframes cardIn{to{transform:none;opacity:1}}
+
+    /* LEFT: FORM */
+    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.02)}
+    .heading{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffb48f);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1220;font-size:22px}
+    .title{font-size:20px;font-weight:700}
+    .subtitle{color:var(--muted);font-size:13px;margin-top:2px}
+
+    form {display:flex;flex-direction:column;gap:14px}
+    .row{display:flex;gap:12px}
+    .field{flex:1;display:flex;flex-direction:column}
+    label{font-size:13px;color:var(--muted);margin-bottom:8px}
+    input[type="text"],input[type="email"],textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px 14px;border-radius:12px;color:var(--muted);outline:none;font-size:14px;transition:all .18s ease}
+    input:focus,textarea:focus{border-color:rgba(255,255,255,0.12);box-shadow:0 6px 18px rgba(11,18,32,0.6)}
+
+    textarea{min-height:140px;resize:vertical}
+
+    /* Stars */
+    .rating{display:flex;align-items:center;gap:8px}
+    .stars{display:flex;gap:6px}
+    .star{width:44px;height:44px;border-radius:10px;background:var(--glass-2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s ease,background .12s ease;user-select:none}
+    .star:hover{transform:translateY(-6px)}
+    .star svg{width:22px;height:22px;opacity:.9}
+    .star.active{background:linear-gradient(135deg,var(--accent),#ffb48f);box-shadow:0 10px 30px rgba(255,122,89,0.18)}
+
+    .hint{font-size:13px;color:var(--muted)}
+
+    .actions{display:flex;gap:12px;align-items:center;margin-top:6px}
+    .btn{padding:12px 18px;border-radius:12px;border:none;cursor:pointer;font-weight:700}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#ffb48f);color:#06101a;box-shadow:0 12px 30px rgba(255,122,89,0.12)}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    /* RIGHT: PREVIEW & REVIEWS */
+    .side{display:flex;flex-direction:column;gap:14px}
+    .preview{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02)}
+    .preview h3{margin:0 0 6px 0}
+    .preview .meta{color:var(--muted);font-size:13px;margin-bottom:10px}
+
+    .reviews-list{display:flex;flex-direction:column;gap:12px;max-height:330px;overflow:auto;padding-right:6px}
+    .review-card{background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(255,255,255,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);animation:fadeUp .36s ease both}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .review-top{display:flex;align-items:center;justify-content:space-between}
+    .r-left{display:flex;gap:10px;align-items:center}
+    .avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#122231,#0d2335);display:flex;align-items:center;justify-content:center;color:#9fb6d4;font-weight:700}
+    .r-name{font-weight:700}
+    .r-stars{color:var(--accent);font-weight:800}
+    .r-text{color:var(--muted);margin-top:8px;font-size:14px}
+
+    /* small screens */
+    @media (max-width:900px){.card{grid-template-columns:1fr;}.side{order:2}}
+
+    /* tiny helper */
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-label="Review form card">
+
+      <!-- LEFT: Form -->
+      <section class="panel" aria-labelledby="formTitle">
+        <div class="heading">
+          <div class="logo">REV</div>
+          <div>
+            <div id="formTitle" class="title">Share your honest review</div>
+            <div class="subtitle">Large, friendly form — name, email, review text and a 5-star rating. Quick, accessible and animated.</div>
+          </div>
+        </div>
+
+        <form id="reviewForm" novalidate>
+          <div class="row">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" name="name" type="text" placeholder="Your full name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="message">Your review</label>
+            <textarea id="message" name="message" placeholder="Tell us what you liked or what we can improve..." required></textarea>
+          </div>
+
+          <div>
+            <label class="hint">Rating</label>
+            <div class="rating" aria-label="Star rating">
+              <div class="stars" id="stars" role="radiogroup" aria-labelledby="starLabel">
+                <!-- Stars injected by JS -->
+              </div>
+              <div class="hint" id="starHint">Select between 1 and 5 stars</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="btn primary">Submit review</button>
+            <button type="button" id="clearBtn" class="btn ghost">Clear</button>
+            <div style="flex:1"></div>
+            <div id="formMsg" style="font-size:13px;color:var(--muted)"></div>
+          </div>
+        </form>
+      </section>
+
+      <!-- RIGHT: Preview & Reviews -->
+      <aside class="side">
+        <div class="preview">
+          <h3>Preview</h3>
+          <div class="meta">How your review will appear to other users</div>
+
+          <div style="display:flex;gap:12px;align-items:flex-start">
+            <div style="flex:1">
+              <div id="previewName" style="font-weight:700">Your name</div>
+              <div id="previewEmail" style="font-size:13px;color:var(--muted)">your@example.com</div>
+            </div>
+            <div id="previewStars" style="font-weight:800;color:var(--accent);">⭐️⭐️⭐️⭐️⭐️</div>
+          </div>
+
+          <div id="previewText" style="margin-top:12px;color:var(--muted)">Your message preview will show here. Keep it constructive — short paragraphs work best.</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h4 style="margin:0">Recent reviews</h4>
+          <button id="exportBtn" class="btn ghost">Export JSON</button>
+        </div>
+
+        <div class="reviews-list" id="reviewsList" aria-live="polite"> 
+          <!-- review cards inserted here -->
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+
+  <script>
+    // --- Small utility ---
+    const q = (s, root=document) => root.querySelector(s);
+    const createEl = (tag, props={}) => Object.assign(document.createElement(tag), props);
+
+    // --- Stars setup ---
+    const starsContainer = q('#stars');
+    let currentRating = 5; // default to 5
+
+    function buildStars() {
+      starsContainer.innerHTML = '';
+      for (let i=1;i<=5;i++){
+        const btn = createEl('button',{className:'star',innerHTML:starSVG(),type:'button',title:`${i} star${i>1?'s':''}`, 'aria-pressed': false});
+        btn.dataset.value = i;
+        btn.addEventListener('click',()=>setRating(i));
+        btn.addEventListener('keydown', (e)=>{
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRating(i); }
+        });
+        btn.setAttribute('role','radio');
+        btn.setAttribute('aria-label', i + ' stars');
+        starsContainer.appendChild(btn);
+      }
+      setRating(currentRating);
+    }
+
+    function setRating(val){
+      currentRating = val;
+      const btns = starsContainer.querySelectorAll('.star');
+      btns.forEach(b=>{
+        const v = Number(b.dataset.value);
+        if(v<=val){ b.classList.add('active'); b.setAttribute('aria-checked','true'); }
+        else{ b.classList.remove('active'); b.setAttribute('aria-checked','false'); }
+      });
+      q('#starHint').textContent = val + ' / 5 stars';
+      updatePreview();
+    }
+
+    function starSVG(){
+      return ` <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
+    }
+
+    // --- Form interactions ---
+    const form = q('#reviewForm');
+    const nameInput = q('#name');
+    const emailInput = q('#email');
+    const msgInput = q('#message');
+    const msgNode = q('#formMsg');
+    const reviewsList = q('#reviewsList');
+
+    function updatePreview(){
+      q('#previewName').textContent = nameInput.value || 'Your name';
+      q('#previewEmail').textContent = emailInput.value || 'your@example.com';
+      q('#previewText').textContent = msgInput.value || 'Your message preview will show here. Keep it constructive.';
+      q('#previewStars').textContent = '⭐'.repeat(currentRating);
+    }
+
+    [nameInput,emailInput,msgInput].forEach(inp=>inp.addEventListener('input', updatePreview));
+
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      submitReview();
+    });
+
+    q('#clearBtn').addEventListener('click', ()=>{
+      form.reset(); currentRating = 5; setRating(5); updatePreview(); msgNode.textContent = '';
+    });
+
+    function validateEmail(email){
+      return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    }
+
+    // --- Persistence (localStorage) ---
+    const STORAGE_KEY = 'animated_reviews_v1';
+    function loadReviews(){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      try{
+        const list = raw ? JSON.parse(raw) : [];
+        renderReviews(list);
+      }catch(e){ localStorage.removeItem(STORAGE_KEY); }
+    }
+
+    function saveReviewToStorage(review){
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const list = raw ? JSON.parse(raw) : [];
+      list.unshift(review);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0,50)));
+      renderReviews(list);
+    }
+
+    function renderReviews(list){
+      reviewsList.innerHTML = '';
+      if(!list || list.length===0){ reviewsList.innerHTML = '<div class="review-card" style="text-align:center;color:var(--muted)">No reviews yet — be the first!</div>'; return }
+      list.forEach(r=>{
+        const card = createEl('div',{className:'review-card'});
+        card.innerHTML = `
+          <div class=\"review-top\"> 
+            <div class=\"r-left\"> 
+              <div class=\"avatar\">${(r.name||'U').slice(0,1).toUpperCase()}</div>
+              <div>
+                <div class=\"r-name\">${escapeHTML(r.name||'Anonymous')}</div>
+                <div class=\"meta\" style=\"font-size:13px;color:var(--muted)\">${escapeHTML(r.email||'')}</div>
+              </div>
+            </div>
+            <div class=\"r-stars\">${'⭐'.repeat(r.rating||0)}</div>
+          </div>
+          <div class=\"r-text\">${escapeHTML(r.message||'')}</div>
+        `;
+        reviewsList.appendChild(card);
+      });
+    }
+
+    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    // --- Submit logic ---
+    function submitReview(){
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const message = msgInput.value.trim();
+      const rating = currentRating;
+
+      if(!name || !email || !message){ msgNode.textContent = 'Please fill name, email and review.'; msgNode.style.color = 'tomato'; return }
+      if(!validateEmail(email)){ msgNode.textContent = 'Please enter a valid email address.'; msgNode.style.color = 'tomato'; return }
+
+      const review = { name, email, message, rating, created: new Date().toISOString() };
+      saveReviewToStorage(review);
+
+      // small animated success feedback
+      msgNode.textContent = 'Thanks! Your review was submitted.'; msgNode.style.color = 'var(--success)';
+      form.reset(); setRating(5); updatePreview();
+
+      // subtle pulse animation on the top of reviews
+      const flash = createEl('div',{innerHTML:'<div style="height:8px"></div>'});
+      reviewsList.prepend(flash);
+      setTimeout(()=>{ if(flash.parentNode) flash.remove(); }, 600);
+    }
+
+    // --- Export JSON ---
+    q('#exportBtn').addEventListener('click', ()=>{
+      const raw = localStorage.getItem(STORAGE_KEY) || '[]';
+      const blob = new Blob([raw], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = createEl('a',{href:url,download:'reviews.json'});
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // --- Init ---
+    buildStars(); loadReviews(); updatePreview();
+
+    // Accessibility: keyboard focus for stars
+    starsContainer.addEventListener('keydown', (e)=>{
+      const focused = document.activeElement;
+      if(!focused || !focused.classList.contains('star')) return;
+      if(e.key === 'ArrowRight' || e.key === 'ArrowUp'){ e.preventDefault(); const next = focused.nextElementSibling || starsContainer.firstElementChild; next.focus(); }
+      if(e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ e.preventDefault(); const prev = focused.previousElementSibling || starsContainer.lastElementChild; prev.focus(); }
+    });
+
+  </script>
+</body>
+</html>
