@@ -1,322 +1,531 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Animated Reviews — Submit a Review</title>
-  <style>
-    :root{
-      --bg:#0f1724; --card:#0b1220; --glass: rgba(255,255,255,0.04);
-      --accent:#ff7a59; --muted:#9aa4b2; --success:#2ecc71;
-      --radius:18px; --glass-2: rgba(255,255,255,0.03);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;background:linear-gradient(180deg,#071124 0%, #07172a 60%);color:#e6eef8}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗳 भारतीय चुनाव सलाहकार - Interactive Election Guide</title>
 
-    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px}
+    <!-- Icon Button (place this where you want the button in index.html) -->
+<a href="review.html" style="
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background: orange;
+    color: white;
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 24px;
+">
+    ★
+</a>
 
-    .card{
-      width:980px;max-width:96%;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:var(--radius);padding:28px;display:grid;grid-template-columns:520px 1fr;gap:24px;
-      box-shadow: 0 10px 40px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-      border: 1px solid rgba(255,255,255,0.03);
-      transform: translateY(10px);opacity:0;animation:cardIn .7s ease-out .12s forwards
-    }
-    @keyframes cardIn{to{transform:none;opacity:1}}
-
-    /* LEFT: FORM */
-    .panel{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.02));border-radius:14px;padding:22px;border:1px solid rgba(255,255,255,0.02)}
-    .heading{display:flex;gap:12px;align-items:center;margin-bottom:14px}
-    .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#ffb48f);display:flex;align-items:center;justify-content:center;font-weight:800;color:#0b1220;font-size:22px}
-    .title{font-size:20px;font-weight:700}
-    .subtitle{color:var(--muted);font-size:13px;margin-top:2px}
-
-    form {display:flex;flex-direction:column;gap:14px}
-    .row{display:flex;gap:12px}
-    .field{flex:1;display:flex;flex-direction:column}
-    label{font-size:13px;color:var(--muted);margin-bottom:8px}
-    input[type="text"],input[type="email"],textarea{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px 14px;border-radius:12px;color:var(--muted);outline:none;font-size:14px;transition:all .18s ease}
-    input:focus,textarea:focus{border-color:rgba(255,255,255,0.12);box-shadow:0 6px 18px rgba(11,18,32,0.6)}
-
-    textarea{min-height:140px;resize:vertical}
-
-    /* Stars */
-    .rating{display:flex;align-items:center;gap:8px}
-    .stars{display:flex;gap:6px}
-    .star{width:44px;height:44px;border-radius:10px;background:var(--glass-2);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s ease,background .12s ease;user-select:none}
-    .star:hover{transform:translateY(-6px)}
-    .star svg{width:22px;height:22px;opacity:.9}
-    .star.active{background:linear-gradient(135deg,var(--accent),#ffb48f);box-shadow:0 10px 30px rgba(255,122,89,0.18)}
-
-    .hint{font-size:13px;color:var(--muted)}
-
-    .actions{display:flex;gap:12px;align-items:center;margin-top:6px}
-    .btn{padding:12px 18px;border-radius:12px;border:none;cursor:pointer;font-weight:700}
-    .btn.primary{background:linear-gradient(90deg,var(--accent),#ffb48f);color:#06101a;box-shadow:0 12px 30px rgba(255,122,89,0.12)}
-    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-
-    /* RIGHT: PREVIEW & REVIEWS */
-    .side{display:flex;flex-direction:column;gap:14px}
-    .preview{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.02)}
-    .preview h3{margin:0 0 6px 0}
-    .preview .meta{color:var(--muted);font-size:13px;margin-bottom:10px}
-
-    .reviews-list{display:flex;flex-direction:column;gap:12px;max-height:330px;overflow:auto;padding-right:6px}
-    .review-card{background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(255,255,255,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);animation:fadeUp .36s ease both}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-    .review-top{display:flex;align-items:center;justify-content:space-between}
-    .r-left{display:flex;gap:10px;align-items:center}
-    .avatar{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#122231,#0d2335);display:flex;align-items:center;justify-content:center;color:#9fb6d4;font-weight:700}
-    .r-name{font-weight:700}
-    .r-stars{color:var(--accent);font-weight:800}
-    .r-text{color:var(--muted);margin-top:8px;font-size:14px}
-
-    /* small screens */
-    @media (max-width:900px){.card{grid-template-columns:1fr;}.side{order:2}}
-
-    /* tiny helper */
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-
-  </style>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary-orange: #ff7f3f; --primary-blue: #3498db; --primary-green: #2ecc71; --primary-purple: #9b59b6;
+            --glass-light: rgba(255, 255, 255, 0.15); --glass-border-light: rgba(255, 255, 255, 0.3);
+            --text-primary-light: #2c3e50; --text-secondary-light: #7f8c8d;
+            --glass-dark: rgba(0, 0, 0, 0.2); --glass-border-dark: rgba(255, 255, 255, 0.1);
+            --text-primary-dark: #ecf0f1; --text-secondary-dark: #bdc3c7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%; animation: gradientFlow 15s ease infinite;
+            min-height: 100vh; margin: 0; padding: 0; overflow-x: hidden; transition: all 0.3s ease;
+        }
+        body.dark-mode {
+            background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460, #533483);
+            background-size: 400% 400%; animation: gradientFlow 15s ease infinite;
+        }
+        @keyframes gradientFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .particles-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50%; animation: floatParticle 8s linear infinite; }
+        @keyframes floatParticle { from { transform: translateY(100vh) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } to { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+        
+        #welcomeScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            transition: opacity 0.8s ease-in-out, visibility 0.8s; text-align: center; padding: 20px;
+        }
+        body.dark-mode #welcomeScreen { background: rgba(0, 0, 0, 0.15); }
+        #welcomeScreen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .welcome-icon { font-size: 5rem; animation: iconBounce 3s ease-in-out infinite; }
+        #welcomeTitle {
+            font-size: 2.8rem; font-weight: 800; margin-top: 20px; background: linear-gradient(45deg, var(--primary-orange), var(--primary-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        #welcomeSubtitle { font-size: 1.2rem; margin-top: 10px; max-width: 500px; color: var(--text-primary-light); }
+        body.dark-mode #welcomeSubtitle { color: var(--text-primary-dark); }
+        #startButton {
+            margin-top: 40px; padding: 18px 45px; font-size: 1.2rem; font-weight: 700; color: white;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); border: none; border-radius: 50px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        #startButton:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4); }
+        
+        .app-container {
+            position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column;
+            padding: 20px; gap: 20px; opacity: 0; visibility: hidden; transform: translateY(20px);
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
+        }
+        .app-container.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        
+        .header {
+            background: var(--glass-light); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border-light); border-radius: 25px; padding: 30px;
+            text-align: center; position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        body.dark-mode .header { background: var(--glass-dark); border: 1px solid var(--glass-border-dark); }
+        .header::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: conic-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotateGlow 10s linear infinite; z-index: -1;
+        }
+        @keyframes rotateGlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .header-title {
+            font-size: 2.5rem; font-weight: 800; margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+        @keyframes titlePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .header-subtitle { color: var(--text-primary-light); font-size: 1.1rem; opacity: 0.9; }
+        body.dark-mode .header-subtitle { color: var(--text-primary-dark); }
+        
+        .header-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; align-items: center; }
+        .control-btn {
+            background: var(--glass-light); border: 2px solid var(--glass-border-light); color: var(--text-primary-light);
+            padding: 12px; border-radius: 50%; cursor: pointer; font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+            width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem;
+        }
+        .lang-selector-group { display: flex; gap: 5px; background: var(--glass-light); border-radius: 25px; padding: 5px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+        .lang-btn {
+             background: transparent; border: none; color: var(--text-primary-light); padding: 8px 15px;
+             border-radius: 20px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;
+        }
+        body.dark-mode .control-btn, body.dark-mode .lang-selector-group { background: var(--glass-dark); }
+        body.dark-mode .lang-btn { color: var(--text-primary-dark); }
+        .control-btn:hover, .lang-btn:hover { transform: translateY(-3px) scale(1.1); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
+        .lang-btn.active, .control-btn.active { background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); color: white; border-color: transparent; }
+        
+        .topics-section {
+            background: var(--glass-light); backdrop-filter: blur(20px); border: 1px solid var(--glass-border-light);
+            border-radius: 25px; padding: 30px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        body.dark-mode .topics-section { background: var(--glass-dark); border: 1px solid var(--glass-border-dark); }
+        .topics-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; color: var(--text-primary-light); text-align: center; }
+        body.dark-mode .topics-title { color: var(--text-primary-dark); }
+        .topics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .topic-card {
+            background: var(--glass-light); backdrop-filter: blur(15px); border: 2px solid var(--glass-border-light);
+            border-radius: 20px; padding: 25px; cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden; color: var(--text-primary-light);
+        }
+        body.dark-mode .topic-card { background: var(--glass-dark); border: 2px solid var(--glass-border-dark); color: var(--text-primary-dark); }
+        .topic-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .topic-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); border-color: var(--primary-blue); }
+        .topic-card:hover::before { left: 100%; }
+        .topic-icon { font-size: 2.5rem; display: block; margin-bottom: 15px; animation: iconBounce 2s ease-in-out infinite; }
+        @keyframes iconBounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+        .topic-text { font-weight: 600; font-size: 1rem; line-height: 1.5; }
+        
+        .chat-section {
+            flex: 1; background: var(--glass-light); backdrop-filter: blur(20px); border: 1px solid var(--glass-border-light);
+            border-radius: 25px; display: flex; flex-direction: column; overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); min-height: 400px;
+        }
+        body.dark-mode .chat-section { background: var(--glass-dark); border: 1px solid var(--glass-border-dark); }
+        .messages-container { flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px; }
+        .message { display: flex; align-items: flex-start; opacity: 0; animation: messageSlideIn 0.6s ease forwards; }
+        .message.user { justify-content: flex-end; }
+        @keyframes messageSlideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .message-avatar { font-size: 1.8rem; margin: 0 15px; animation: avatarWiggle 4s ease-in-out infinite; }
+        @keyframes avatarWiggle { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-5deg); } 75% { transform: rotate(5deg); } }
+        .message-bubble { max-width: 75%; padding: 20px 25px; border-radius: 25px; line-height: 1.6; word-wrap: break-word; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+        .message.user .message-bubble { background: linear-gradient(135deg, var(--primary-orange), var(--primary-purple)); color: white; border-radius: 25px 25px 5px 25px; box-shadow: 0 8px 25px rgba(255, 127, 63, 0.3); }
+        .message.bot .message-bubble { background: var(--glass-light); backdrop-filter: blur(15px); border: 2px solid var(--glass-border-light); border-radius: 25px 25px 25px 5px; color: var(--text-primary-light); }
+        body.dark-mode .message.bot .message-bubble { background: var(--glass-dark); border: 2px solid var(--glass-border-dark); color: var(--text-primary-dark); }
+        .message.bot.typing-indicator .message-bubble { background: none; border: none; box-shadow: none; backdrop-filter: none; }
+        
+        .typing-bubble { background: var(--glass-light); backdrop-filter: blur(15px); border: 2px solid var(--glass-border-light); border-radius: 25px; padding: 20px 25px; display: flex; gap: 8px; }
+        body.dark-mode .typing-bubble { background: var(--glass-dark); border: 2px solid var(--glass-border-dark); }
+        .typing-dot { width: 12px; height: 12px; background: var(--primary-blue); border-radius: 50%; animation: typingAnimation 1.4s infinite ease-in-out; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; } .typing-dot:nth-child(2) { animation-delay: -0.16s; } .typing-dot:nth-child(3) { animation-delay: 0s; }
+        @keyframes typingAnimation { 0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1.2); opacity: 1; } }
+        
+        .input-section { padding: 30px; background: var(--glass-light); backdrop-filter: blur(20px); border-top: 2px solid var(--glass-border-light); }
+        body.dark-mode .input-section { background: var(--glass-dark); border-top: 2px solid var(--glass-border-dark); }
+        .input-row { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .message-input {
+            flex: 1; padding: 18px 25px; border: 3px solid var(--glass-border-light); border-radius: 25px;
+            background: var(--glass-light); backdrop-filter: blur(10px); color: var(--text-primary-light);
+            font-size: 1rem; outline: none; transition: all 0.3s ease;
+        }
+        body.dark-mode .message-input { border: 3px solid var(--glass-border-dark); background: var(--glass-dark); color: var(--text-primary-dark); }
+        .message-input:focus { border-color: var(--primary-blue); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3); }
+        .message-input::placeholder { color: var(--text-secondary-light); }
+        body.dark-mode .message-input::placeholder { color: var(--text-secondary-dark); }
+        .action-btn {
+            padding: 18px 25px; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; min-width: 80px;
+        }
+        .send-btn { background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); color: white; }
+        .voice-btn { background: linear-gradient(135deg, var(--primary-green), var(--primary-blue)); color: white; }
+        .action-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2); }
+        
+        .footer-info { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .info-item {
+            background: var(--glass-light); backdrop-filter: blur(10px); border: 1px solid var(--glass-border-light);
+            padding: 12px 20px; border-radius: 20px; color: var(--text-primary-light);
+            font-size: 0.9rem; font-weight: 600; transition: all 0.3s ease;
+        }
+        body.dark-mode .info-item { background: var(--glass-dark); border: 1px solid var(--glass-border-dark); color: var(--text-primary-dark); }
+        .info-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+        
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-purple));
+            width: 0; z-index: 9999; transition: width 0.3s ease; border-radius: 0 2px 2px 0;
+        }
+        .messages-container::-webkit-scrollbar { width: 8px; }
+        .messages-container::-webkit-scrollbar-track { background: transparent; }
+        .messages-container::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)); border-radius: 10px; }
+        
+        strong { font-weight: 700; color: var(--primary-orange); }
+        body.dark-mode strong { color: #ffa726; }
+        
+        @media (max-width: 768px) {
+            .app-container { padding: 10px; gap: 15px; }
+            .header { padding: 20px; }
+            .header-title { font-size: 1.8rem; }
+            .header-controls { position: static; margin-top: 15px; justify-content: center; flex-wrap: wrap; }
+            .topics-grid { grid-template-columns: 1fr; gap: 15px; }
+            .input-row { flex-direction: column; gap: 10px; }
+            .action-btn { width: 100%; }
+            .footer-info { flex-direction: column; gap: 10px; }
+            .message-bubble { max-width: 90%; }
+        }
+    </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card" role="region" aria-label="Review form card">
+    <div class="particles-bg" id="particlesBg"></div>
+    <div class="progress-bar" id="progressBar"></div>
 
-      <!-- LEFT: Form -->
-      <section class="panel" aria-labelledby="formTitle">
-        <div class="heading">
-          <div class="logo">REV</div>
-          <div>
-            <div id="formTitle" class="title">Share your honest review</div>
-            <div class="subtitle">Large, friendly form — name, email, review text and a 5-star rating. Quick, accessible and animated.</div>
-          </div>
-        </div>
-
-        <form id="reviewForm" novalidate>
-          <div class="row">
-            <div class="field">
-              <label for="name">Name</label>
-              <input id="name" name="name" type="text" placeholder="Your full name" autocomplete="name" required />
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="message">Your review</label>
-            <textarea id="message" name="message" placeholder="Tell us what you liked or what we can improve..." required></textarea>
-          </div>
-
-          <div>
-            <label class="hint">Rating</label>
-            <div class="rating" aria-label="Star rating">
-              <div class="stars" id="stars" role="radiogroup" aria-labelledby="starLabel">
-                <!-- Stars injected by JS -->
-              </div>
-              <div class="hint" id="starHint">Select between 1 and 5 stars</div>
-            </div>
-          </div>
-
-          <div class="actions">
-            <button type="submit" class="btn primary">Submit review</button>
-            <button type="button" id="clearBtn" class="btn ghost">Clear</button>
-            <div style="flex:1"></div>
-            <div id="formMsg" style="font-size:13px;color:var(--muted)"></div>
-          </div>
-        </form>
-      </section>
-
-      <!-- RIGHT: Preview & Reviews -->
-      <aside class="side">
-        <div class="preview">
-          <h3>Preview</h3>
-          <div class="meta">How your review will appear to other users</div>
-
-          <div style="display:flex;gap:12px;align-items:flex-start">
-            <div style="flex:1">
-              <div id="previewName" style="font-weight:700">Your name</div>
-              <div id="previewEmail" style="font-size:13px;color:var(--muted)">your@example.com</div>
-            </div>
-            <div id="previewStars" style="font-weight:800;color:var(--accent);">⭐️⭐️⭐️⭐️⭐️</div>
-          </div>
-
-          <div id="previewText" style="margin-top:12px;color:var(--muted)">Your message preview will show here. Keep it constructive — short paragraphs work best.</div>
-        </div>
-
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <h4 style="margin:0">Recent reviews</h4>
-          <button id="exportBtn" class="btn ghost">Export JSON</button>
-        </div>
-
-        <div class="reviews-list" id="reviewsList" aria-live="polite"> 
-          <!-- review cards inserted here -->
-        </div>
-
-      </aside>
-
+    <div id="welcomeScreen">
+        <div class="welcome-icon">🗳</div>
+        <h1 id="welcomeTitle"></h1>
+        <p id="welcomeSubtitle"></p>
+        <button id="startButton"></button>
     </div>
-  </div>
 
-  <script>
-    // --- Small utility ---
-    const q = (s, root=document) => root.querySelector(s);
-    const createEl = (tag, props={}) => Object.assign(document.createElement(tag), props);
-
-    // --- Stars setup ---
-    const starsContainer = q('#stars');
-    let currentRating = 5; // default to 5
-
-    function buildStars() {
-      starsContainer.innerHTML = '';
-      for (let i=1;i<=5;i++){
-        const btn = createEl('button',{className:'star',innerHTML:starSVG(),type:'button',title:`${i} star${i>1?'s':''}`, 'aria-pressed': false});
-        btn.dataset.value = i;
-        btn.addEventListener('click',()=>setRating(i));
-        btn.addEventListener('keydown', (e)=>{
-          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setRating(i); }
-        });
-        btn.setAttribute('role','radio');
-        btn.setAttribute('aria-label', i + ' stars');
-        starsContainer.appendChild(btn);
-      }
-      setRating(currentRating);
-    }
-
-    function setRating(val){
-      currentRating = val;
-      const btns = starsContainer.querySelectorAll('.star');
-      btns.forEach(b=>{
-        const v = Number(b.dataset.value);
-        if(v<=val){ b.classList.add('active'); b.setAttribute('aria-checked','true'); }
-        else{ b.classList.remove('active'); b.setAttribute('aria-checked','false'); }
-      });
-      q('#starHint').textContent = val + ' / 5 stars';
-      updatePreview();
-    }
-
-    function starSVG(){
-      return ` <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-    }
-
-    // --- Form interactions ---
-    const form = q('#reviewForm');
-    const nameInput = q('#name');
-    const emailInput = q('#email');
-    const msgInput = q('#message');
-    const msgNode = q('#formMsg');
-    const reviewsList = q('#reviewsList');
-
-    function updatePreview(){
-      q('#previewName').textContent = nameInput.value || 'Your name';
-      q('#previewEmail').textContent = emailInput.value || 'your@example.com';
-      q('#previewText').textContent = msgInput.value || 'Your message preview will show here. Keep it constructive.';
-      q('#previewStars').textContent = '⭐'.repeat(currentRating);
-    }
-
-    [nameInput,emailInput,msgInput].forEach(inp=>inp.addEventListener('input', updatePreview));
-
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      submitReview();
-    });
-
-    q('#clearBtn').addEventListener('click', ()=>{
-      form.reset(); currentRating = 5; setRating(5); updatePreview(); msgNode.textContent = '';
-    });
-
-    function validateEmail(email){
-      return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
-    }
-
-    // --- Persistence (localStorage) ---
-    const STORAGE_KEY = 'animated_reviews_v1';
-    function loadReviews(){
-      const raw = localStorage.getItem(STORAGE_KEY);
-      try{
-        const list = raw ? JSON.parse(raw) : [];
-        renderReviews(list);
-      }catch(e){ localStorage.removeItem(STORAGE_KEY); }
-    }
-
-    function saveReviewToStorage(review){
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const list = raw ? JSON.parse(raw) : [];
-      list.unshift(review);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(list.slice(0,50)));
-      renderReviews(list);
-    }
-
-    function renderReviews(list){
-      reviewsList.innerHTML = '';
-      if(!list || list.length===0){ reviewsList.innerHTML = '<div class="review-card" style="text-align:center;color:var(--muted)">No reviews yet — be the first!</div>'; return }
-      list.forEach(r=>{
-        const card = createEl('div',{className:'review-card'});
-        card.innerHTML = `
-          <div class=\"review-top\"> 
-            <div class=\"r-left\"> 
-              <div class=\"avatar\">${(r.name||'U').slice(0,1).toUpperCase()}</div>
-              <div>
-                <div class=\"r-name\">${escapeHTML(r.name||'Anonymous')}</div>
-                <div class=\"meta\" style=\"font-size:13px;color:var(--muted)\">${escapeHTML(r.email||'')}</div>
-              </div>
+    <div class="app-container">
+        <header class="header">
+            <h1 class="header-title" id="headerTitle"></h1>
+            <p class="header-subtitle" id="headerSubtitle"></p>
+            <div class="header-controls">
+                <div class="lang-selector-group">
+                    <button class="lang-btn active" data-lang="hi">हिन्दी</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+                <button class="control-btn" id="speechToggle" aria-label="Enable Voice Assistant">
+                    <span id="speechIcon">🔇</span>
+                </button>
+                <button class="control-btn" id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
             </div>
-            <div class=\"r-stars\">${'⭐'.repeat(r.rating||0)}</div>
-          </div>
-          <div class=\"r-text\">${escapeHTML(r.message||'')}</div>
-        `;
-        reviewsList.appendChild(card);
-      });
-    }
+        </header>
 
-    function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+        <section class="topics-section">
+            <h2 class="topics-title" id="topicsTitle"></h2>
+            <div class="topics-grid">
+                 <div class="topic-card" onclick="selectTopic('registration')"><span class="topic-icon">📝</span><div class="topic-text" id="topicRegText"></div></div>
+                 <div class="topic-card" onclick="selectTopic('epic')"><span class="topic-icon">🆔</span><div class="topic-text" id="topicEpicText"></div></div>
+                 <div class="topic-card" onclick="selectTopic('pollingStation')"><span class="topic-icon">📍</span><div class="topic-text" id="topicStationText"></div></div>
+                 <div class="topic-card" onclick="selectTopic('schedule')"><span class="topic-icon">📅</span><div class="topic-text" id="topicScheduleText"></div></div>
+                 <div class="topic-card" onclick="selectTopic('evm')"><span class="topic-icon">🗳</span><div class="topic-text" id="topicEvmText"></div></div>
+                 <div class="topic-card" onclick="selectTopic('rights')"><span class="topic-icon">⚖</span><div class="topic-text" id="topicRightsText"></div></div>
+            </div>
+        </section>
 
-    // --- Submit logic ---
-    function submitReview(){
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const message = msgInput.value.trim();
-      const rating = currentRating;
+        <main class="chat-section">
+            <div class="messages-container" id="messagesContainer"></div>
+            <div class="input-section">
+                <div class="input-row">
+                    <input type="text" class="message-input" id="messageInput" onkeypress="handleEnterKey(event)">
+                    <button class="action-btn send-btn" onclick="sendUserMessage()" id="sendBtn"></button>
+                    <button class="action-btn voice-btn" onclick="startVoiceRecognition()" id="voiceBtn"></button>
+                </div>
+                <div class="footer-info">
+                    <div class="info-item" id="footerHelpline"></div>
+                    <div class="info-item" id="footerWebsite"></div>
+                    <div class="info-item" id="footerPortal"></div>
+                </div>
+            </div>
+        </main>
+    </div>
 
-      if(!name || !email || !message){ msgNode.textContent = 'Please fill name, email and review.'; msgNode.style.color = 'tomato'; return }
-      if(!validateEmail(email)){ msgNode.textContent = 'Please enter a valid email address.'; msgNode.style.color = 'tomato'; return }
+    <script>
+        // --- GLOBAL STATE ---
+        let isCurrentlyTyping = false, isDarkTheme = false, isRecording = false, currentLang = 'hi', isSpeechEnabled = false;
 
-      const review = { name, email, message, rating, created: new Date().toISOString() };
-      saveReviewToStorage(review);
+        // --- UI TEXT & TRANSLATIONS ---
+        const uiStrings = {
+            hi: {
+                welcomeTitle: "भारतीय चुनाव सलाहकार",
+                welcomeSubtitle: "आपका व्यक्तिगत, स्मार्ट चुनाव सहायक। भारत की चुनावी प्रक्रिया के बारे में सब कुछ जानें।",
+                welcomeButton: "चलिए शुरू करें",
+                title: "🗳 भारतीय चुनाव सलाहकार",
+                subtitle: "Interactive Election Guide - आपका स्मार्ट चुनाव सहायक",
+                topicsTitle: "🚀 त्वरित चुनाव विषय",
+                topicRegText: "Voter Registration<br>मतदाता पंजीकरण प्रक्रिया",
+                topicEpicText: "EPIC Card Application<br>पहचान पत्र आवेदन",
+                topicStationText: "Find Polling Station<br>मतदान केंद्र खोजें",
+                topicScheduleText: "Election Schedule<br>चुनाव कार्यक्रम",
+                topicEvmText: "EVM/VVPAT Usage<br>मतदान मशीन गाइड",
+                topicRightsText: "Voter Rights<br>मतदाता अधिकार",
+                inputPlaceholder: "अपना चुनाव संबंधी प्रश्न यहाँ लिखें... 🗳",
+                sendBtn: "📤 भेजें",
+                voiceBtn: "🎤 बोलें",
+                voiceBtnRecording: "🔴 रिकॉर्डिंग...",
+                footerHelpline: "📞 हेल्पलाइन: 1950",
+                footerWebsite: "🌐 वेबसाइट: eci.gov.in",
+                footerPortal: "📱 पोर्टल: nvsp.in",
+                questions: { registration: "मतदाता पंजीकरण की संपूर्ण प्रक्रिया क्या है?", epic: "EPIC कार्ड के लिए आवेदन कैसे करें?", pollingStation: "अपना मतदान केंद्र कैसे खोजें?", schedule: "अगले चुनाव कब होंगे?", evm: "EVM और VVPAT का उपयोग कैसे करते हैं?", rights: "मतदाता के अधिकार और कर्तव्य क्या हैं?" },
+                enableSpeech: "आवाज़ सहायक सक्षम करें", disableSpeech: "आवाज़ सहायक अक्षम करें", speechEnabled: "आवाज़ सहायक सक्षम।", speechDisabled: "आवाज़ सहायक अक्षम।",
+            },
+            en: {
+                welcomeTitle: "Indian Election Advisor",
+                welcomeSubtitle: "Your personal, smart election assistant. Learn everything about India's electoral process.",
+                welcomeButton: "Let's Get Started",
+                title: "🗳 Indian Election Advisor",
+                subtitle: "Interactive Election Guide - Your Smart Election Assistant",
+                topicsTitle: "🚀 Quick Election Topics",
+                topicRegText: "Voter Registration<br>Voter Registration Process",
+                topicEpicText: "EPIC Card Application<br>ID Card Application",
+                topicStationText: "Find Polling Station<br>Find Polling Station",
+                topicScheduleText: "Election Schedule<br>Election Schedule",
+                topicEvmText: "EVM/VVPAT Usage<br>Voting Machine Guide",
+                topicRightsText: "Voter Rights<br>Voter Rights",
+                inputPlaceholder: "Type your election-related question here... 🗳",
+                sendBtn: "📤 Send",
+                voiceBtn: "🎤 Voice",
+                voiceBtnRecording: "🔴 Recording...",
+                footerHelpline: "📞 Helpline: 1950",
+                footerWebsite: "🌐 Website: eci.gov.in",
+                footerPortal: "📱 Portal: nvsp.in",
+                questions: { registration: "What is the complete process for voter registration?", epic: "How to apply for an EPIC card?", pollingStation: "How to find my polling station?", schedule: "When are the next elections?", evm: "How to use EVM and VVPAT?", rights: "What are the rights and duties of a voter?" },
+                enableSpeech: "Enable Voice Assistant", disableSpeech: "Disable Voice Assistant", speechEnabled: "Voice assistant enabled.", speechDisabled: "Voice assistant disabled.",
+            }
+        };
 
-      // small animated success feedback
-      msgNode.textContent = 'Thanks! Your review was submitted.'; msgNode.style.color = 'var(--success)';
-      form.reset(); setRating(5); updatePreview();
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', function() {
+            initWelcomeScreen();
+            initializeParticles();
+            setupThemeToggle();
+            setupLanguageSwitcher();
+            setupSpeechToggle();
+            updateUIForLanguage(currentLang, true);
+            updateProgressBar();
+        });
 
-      // subtle pulse animation on the top of reviews
-      const flash = createEl('div',{innerHTML:'<div style="height:8px"></div>'});
-      reviewsList.prepend(flash);
-      setTimeout(()=>{ if(flash.parentNode) flash.remove(); }, 600);
-    }
+        function initWelcomeScreen() {
+            const startButton = document.getElementById('startButton');
+            startButton.addEventListener('click', () => {
+                document.getElementById('welcomeScreen').classList.add('hidden');
+                document.querySelector('.app-container').classList.add('visible');
+                setTimeout(() => sendMessageToServer("GREET_USER", true), 500);
+            });
+        }
 
-    // --- Export JSON ---
-    q('#exportBtn').addEventListener('click', ()=>{
-      const raw = localStorage.getItem(STORAGE_KEY) || '[]';
-      const blob = new Blob([raw], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = createEl('a',{href:url,download:'reviews.json'});
-      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
+        // --- UI & STATE MANAGEMENT ---
+        function updateUIForLanguage(lang, isInitialLoad = false) {
+            currentLang = lang;
+            const strings = uiStrings[lang];
+            
+            document.getElementById('welcomeTitle').textContent = strings.welcomeTitle;
+            document.getElementById('welcomeSubtitle').textContent = strings.welcomeSubtitle;
+            document.getElementById('startButton').textContent = strings.welcomeButton;
+            document.documentElement.lang = lang;
+            document.title = strings.title;
+            document.getElementById('headerTitle').textContent = strings.title;
+            document.getElementById('headerSubtitle').textContent = strings.subtitle;
+            document.getElementById('themeToggle').innerHTML = isDarkTheme ? '☀' : '🌙';
+            document.getElementById('topicsTitle').textContent = strings.topicsTitle;
+            document.getElementById('topicRegText').innerHTML = strings.topicRegText;
+            document.getElementById('topicEpicText').innerHTML = strings.topicEpicText;
+            document.getElementById('topicStationText').innerHTML = strings.topicStationText;
+            document.getElementById('topicScheduleText').innerHTML = strings.topicScheduleText;
+            document.getElementById('topicEvmText').innerHTML = strings.topicEvmText;
+            document.getElementById('topicRightsText').innerHTML = strings.topicRightsText;
+            document.getElementById('messageInput').placeholder = strings.inputPlaceholder;
+            document.getElementById('sendBtn').innerHTML = strings.sendBtn;
+            document.getElementById('voiceBtn').innerHTML = isRecording ? strings.voiceBtnRecording : strings.voiceBtn;
+            document.getElementById('footerHelpline').textContent = strings.footerHelpline;
+            document.getElementById('footerWebsite').textContent = strings.footerWebsite;
+            document.getElementById('footerPortal').textContent = strings.footerPortal;
+            document.getElementById('speechToggle').setAttribute('aria-label', isSpeechEnabled ? strings.disableSpeech : strings.enableSpeech);
 
-    // --- Init ---
-    buildStars(); loadReviews(); updatePreview();
+            if (!isInitialLoad) {
+                document.getElementById('messagesContainer').innerHTML = '';
+                fetch('/reset', { method: 'POST' });
+                sendMessageToServer("GREET_USER", true);
+            }
+        }
+        
+        function setupLanguageSwitcher() {
+            document.querySelectorAll('.lang-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const newLang = this.getAttribute('data-lang');
+                    if (newLang === currentLang) return;
+                    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    updateUIForLanguage(newLang);
+                });
+            });
+        }
 
-    // Accessibility: keyboard focus for stars
-    starsContainer.addEventListener('keydown', (e)=>{
-      const focused = document.activeElement;
-      if(!focused || !focused.classList.contains('star')) return;
-      if(e.key === 'ArrowRight' || e.key === 'ArrowUp'){ e.preventDefault(); const next = focused.nextElementSibling || starsContainer.firstElementChild; next.focus(); }
-      if(e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ e.preventDefault(); const prev = focused.previousElementSibling || starsContainer.lastElementChild; prev.focus(); }
-    });
+        function setupThemeToggle() {
+            document.getElementById('themeToggle').addEventListener('click', function() {
+                isDarkTheme = !isDarkTheme;
+                document.body.classList.toggle('dark-mode', isDarkTheme);
+                this.innerHTML = isDarkTheme ? '☀' : '🌙';
+            });
+        }
 
-  </script>
+        function setupSpeechToggle() {
+            const speechToggle = document.getElementById('speechToggle');
+            speechToggle.addEventListener('click', () => {
+                isSpeechEnabled = !isSpeechEnabled;
+                speechToggle.classList.toggle('active', isSpeechEnabled);
+                document.getElementById('speechIcon').textContent = isSpeechEnabled ? '🔊' : '🔇';
+                speechToggle.setAttribute('aria-label', isSpeechEnabled ? uiStrings[currentLang].disableSpeech : uiStrings[currentLang].enableSpeech);
+                const feedbackText = isSpeechEnabled ? uiStrings[currentLang].speechEnabled : uiStrings[currentLang].speechDisabled;
+                speakText(feedbackText, true);
+            });
+        }
+        
+        // --- ACCESSIBILITY ---
+        function speakText(text, isFeedback = false) {
+            if ((!isSpeechEnabled && !isFeedback) || !window.speechSynthesis) return;
+            const cleanText = text.replace(/<[^>]*>|\\|\//g, ' ').replace(/\s+/g, ' ').trim();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // --- CHAT & BACKEND ---
+        function selectTopic(topicKey) {
+            document.getElementById('messageInput').value = uiStrings[currentLang].questions[topicKey];
+            sendUserMessage();
+        }
+
+        function handleEnterKey(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendUserMessage(); } }
+        
+        function sendUserMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message === '' || isCurrentlyTyping) return;
+            addMessage('user', message);
+            input.value = '';
+            sendMessageToServer(message);
+        }
+
+        async function sendMessageToServer(message, isInitial = false) {
+            if (!isInitial) showTypingIndicator();
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, lang: currentLang }),
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                if (!isInitial) hideTypingIndicator();
+                const botMessageBubble = addMessage('bot', ''); 
+                
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    botMessageBubble.innerHTML = formatMessageText(buffer);
+                    document.getElementById('messagesContainer').scrollTop = document.getElementById('messagesContainer').scrollHeight;
+                }
+                botMessageBubble.innerHTML = formatMessageText(buffer);
+                speakText(buffer);
+            } catch (error) {
+                console.error('Error:', error);
+                if (!isInitial) hideTypingIndicator();
+                const errorMsg = (currentLang === 'hi') ? '🚫 क्षमा करें, सर्वर से कनेक्ट करने में कोई त्रुटि हुई।' : '🚫 Sorry, an error occurred while connecting to the server.';
+                addMessage('bot', errorMsg);
+            }
+        }
+
+        // --- UI HELPERS ---
+        function addMessage(sender, text) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            const avatar = sender === 'user' ? '👤' : '🤖';
+            const messageBubble = document.createElement('div');
+            messageBubble.className = 'message-bubble';
+            messageBubble.innerHTML = formatMessageText(text);
+            messageDiv.appendChild(document.createRange().createContextualFragment(`<div class="message-avatar">${avatar}</div>`));
+            messageDiv.appendChild(messageBubble);
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+            if (sender === 'bot' && text.length > 0) { speakText(text); }
+            return messageBubble;
+        }
+
+        function formatMessageText(text) { return text.replace(/\*(.?)\*/g, '<strong>$1</strong>').replace(/\*(.?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>'); }
+        
+        function showTypingIndicator() {
+            if (isCurrentlyTyping) return; isCurrentlyTyping = true;
+            const indicatorDiv = addMessage('bot', '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>').parentElement;
+            indicatorDiv.classList.add('typing-indicator');
+        }
+        function hideTypingIndicator() {
+            const indicator = document.querySelector('.typing-indicator');
+            if (indicator) indicator.remove(); isCurrentlyTyping = false;
+        }
+        
+        function initializeParticles() {
+            const particlesBg = document.getElementById('particlesBg');
+            const createParticle = () => {
+                const particle = document.createElement('div'); particle.className = 'particle'; particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px'; particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's'; particlesBg.appendChild(particle);
+                setTimeout(() => { if (particle.parentNode) particle.parentNode.removeChild(particle); }, 8000);
+            }; setInterval(createParticle, 300);
+        }
+
+        function updateProgressBar() { let p = 0; setInterval(() => { p = (p + Math.random() * 2) % 100; document.getElementById('progressBar').style.width = p + '%'; }, 100); }
+        
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window)) { return alert('Voice recognition not supported.'); }
+            if (isRecording) return;
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN'; isRecording = true;
+            document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtnRecording;
+            recognition.onresult = (event) => { document.getElementById('messageInput').value = event.results[0][0].transcript; };
+            recognition.onend = () => { isRecording = false; document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtn; if (document.getElementById('messageInput').value) sendUserMessage(); };
+            recognition.onerror = (e) => { console.error("Voice error:", e); isRecording = false; document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtn; };
+            recognition.start();
+        }
+        
+    </script>
 </body>
 </html>
