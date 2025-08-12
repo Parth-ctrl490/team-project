@@ -3,8 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗳 भारतीय चुनाव सलाहकार - Interactive Election Guide</title>
+    <title>🗳️ भारतीय चुनाव सलाहकार - Interactive Election Guide</title>
+    <!-- Icon Button (place this where you want the button in index.html) -->
+<a href="https://your-feedback-form-link.com" 
+   target="_blank" 
+   class="feedback-fab" 
+   title="Give Feedback">
+    💬
+</a>
     <style>
+        .feedback-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-orange);
+    color: white;
+    font-size: 1.8rem;
+    padding: 12px 15px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    text-decoration: none;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+.feedback-fab:hover {
+    background: var(--primary-green);
+    transform: scale(1.1) rotate(5deg);
+}
+        /* --- (Your entire existing beautiful CSS block goes here, unchanged) --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary-orange: #ff7f3f; --primary-blue: #3498db; --primary-green: #2ecc71; --primary-purple: #9b59b6;
@@ -197,9 +223,198 @@
             .footer-info { flex-direction: column; gap: 10px; }
             .message-bubble { max-width: 90%; }
         }
+        
+        /* NEW & MODIFIED CSS FOR THE INLINE FEEDBACK FORM */
+        .feedback-container {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--glass-border-light);
+        }
+        body.dark-mode .feedback-container { border-top-color: var(--glass-border-dark); }
+        .feedback-controls { display: flex; gap: 10px; align-items: center; }
+        .feedback-btn {
+            background: transparent; border: none; color: var(--text-secondary-light);
+            font-size: 1.2rem; cursor: pointer; transition: all 0.2s ease; opacity: 0.7;
+        }
+        body.dark-mode .feedback-btn { color: var(--text-secondary-dark); }
+        .feedback-btn:hover { transform: scale(1.25); opacity: 1; }
+        .feedback-btn.selected { transform: scale(1.25); opacity: 1; }
+        
+        .feedback-form {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.5s ease-in-out;
+            margin-top: 0;
+        }
+        .feedback-form.visible {
+            max-height: 150px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+        .feedback-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px solid var(--glass-border-light);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary-light);
+            font-family: inherit;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        body.dark-mode .feedback-input {
+            border-color: var(--glass-border-dark);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-primary-dark);
+        }
+        .feedback-submit-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 15px;
+            background: var(--primary-green);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .feedback-submit-btn:hover { transform: scale(1.05); }
+
+        .feedback-thanks {
+            font-size: 0.9rem; font-weight: 500;
+            color: var(--text-secondary-light);
+        }
+        body.dark-mode .feedback-thanks { color: var(--text-secondary-dark); }
+        /* Floating Button */
+.feedback-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--primary-orange);
+    color: white;
+    font-size: 1.8rem;
+    padding: 14px 17px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+}
+.feedback-fab:hover {
+    transform: scale(1.15);
+}
+
+/* Popup Background */
+.feedback-popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+/* Popup Card */
+.feedback-card {
+    background: white;
+    padding: 25px;
+    width: 350px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    animation: fadeIn 0.3s ease;
+}
+
+/* Star Rating */
+.star-rating {
+    font-size: 2rem;
+    color: lightgray;
+    cursor: pointer;
+    margin: 10px 0;
+}
+.star-rating span:hover,
+.star-rating span.active {
+    color: gold;
+    transition: color 0.2s;
+}
+
+/* Comment Box */
+textarea {
+    width: 100%;
+    height: 80px;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+    font-size: 1rem;
+}
+
+/* Buttons */
+.submit-btn {
+    background: var(--primary-orange);
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+.submit-btn:hover {
+    background: var(--primary-green);
+}
+.cancel-btn {
+    background: #ccc;
+    color: black;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 8px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+.cancel-btn:hover {
+    background: #999;
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
     </style>
 </head>
 <body>
+    <!-- Feedback Floating Button -->
+<button class="feedback-fab" onclick="toggleFeedbackForm()">💬</button>
+
+<!-- Feedback Form Popup -->
+<div class="feedback-popup" id="feedbackPopup">
+    <div class="feedback-card">
+        <h2>We value your feedback</h2>
+        <p>Rate your experience and share your thoughts.</p>
+
+        <!-- Star Rating -->
+        <div class="star-rating" id="starRating">
+            <span data-value="1">★</span>
+            <span data-value="2">★</span>
+            <span data-value="3">★</span>
+            <span data-value="4">★</span>
+            <span data-value="5">★</span>
+        </div>
+
+        <!-- Comment Box -->
+        <textarea id="feedbackComment" placeholder="Write your feedback here..."></textarea>
+
+        <!-- Submit Button -->
+        <button class="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
+        <button class="cancel-btn" onclick="toggleFeedbackForm()">Cancel</button>
+    </div>
+</div>
     <div class="particles-bg" id="particlesBg"></div>
     <div class="progress-bar" id="progressBar"></div>
 
@@ -256,16 +471,61 @@
     </div>
 
     <script>
+        let selectedRating = 0;
+
+// Show/Hide Feedback Form
+function toggleFeedbackForm() {
+    const popup = document.getElementById('feedbackPopup');
+    popup.style.display = (popup.style.display === 'flex') ? 'none' : 'flex';
+    if (popup.style.display === 'flex') {
+        popup.style.justifyContent = 'center';
+        popup.style.alignItems = 'center';
+    }
+}
+
+// Star Rating Logic
+document.querySelectorAll('#starRating span').forEach(star => {
+    star.addEventListener('click', function() {
+        selectedRating = this.dataset.value;
+        document.querySelectorAll('#starRating span').forEach(s => s.classList.remove('active'));
+        this.classList.add('active');
+        let prev = this.previousElementSibling;
+        while(prev) {
+            prev.classList.add('active');
+            prev = prev.previousElementSibling;
+        }
+    });
+});
+
+// Submit Feedback
+function submitFeedback() {
+    const comment = document.getElementById('feedbackComment').value.trim();
+    if (selectedRating === 0) {
+        alert("Please select a rating!");
+        return;
+    }
+    if (!comment) {
+        alert("Please enter your feedback!");
+        return;
+    }
+
+    // Here you can send the data to your backend or Google Sheets
+    console.log("Rating:", selectedRating);
+    console.log("Comment:", comment);
+
+    alert("Thank you for your feedback! ⭐" + selectedRating);
+    toggleFeedbackForm();
+}
         // --- GLOBAL STATE ---
         let isCurrentlyTyping = false, isDarkTheme = false, isRecording = false, currentLang = 'hi', isSpeechEnabled = false;
 
-        // --- UI TEXT & TRANSLATIONS ---
+        // --- UI TEXT & TRANSLATIONS (CORRECTED & MERGED) ---
         const uiStrings = {
             hi: {
                 welcomeTitle: "भारतीय चुनाव सलाहकार",
                 welcomeSubtitle: "आपका व्यक्तिगत, स्मार्ट चुनाव सहायक। भारत की चुनावी प्रक्रिया के बारे में सब कुछ जानें।",
                 welcomeButton: "चलिए शुरू करें",
-                title: "🗳 भारतीय चुनाव सलाहकार",
+                title: "🗳️ भारतीय चुनाव सलाहकार",
                 subtitle: "Interactive Election Guide - आपका स्मार्ट चुनाव सहायक",
                 topicsTitle: "🚀 त्वरित चुनाव विषय",
                 topicRegText: "Voter Registration<br>मतदाता पंजीकरण प्रक्रिया",
@@ -274,7 +534,7 @@
                 topicScheduleText: "Election Schedule<br>चुनाव कार्यक्रम",
                 topicEvmText: "EVM/VVPAT Usage<br>मतदान मशीन गाइड",
                 topicRightsText: "Voter Rights<br>मतदाता अधिकार",
-                inputPlaceholder: "अपना चुनाव संबंधी प्रश्न यहाँ लिखें... 🗳",
+                inputPlaceholder: "अपना चुनाव संबंधी प्रश्न यहाँ लिखें... 🗳️",
                 sendBtn: "📤 भेजें",
                 voiceBtn: "🎤 बोलें",
                 voiceBtnRecording: "🔴 रिकॉर्डिंग...",
@@ -283,12 +543,15 @@
                 footerPortal: "📱 पोर्टल: nvsp.in",
                 questions: { registration: "मतदाता पंजीकरण की संपूर्ण प्रक्रिया क्या है?", epic: "EPIC कार्ड के लिए आवेदन कैसे करें?", pollingStation: "अपना मतदान केंद्र कैसे खोजें?", schedule: "अगले चुनाव कब होंगे?", evm: "EVM और VVPAT का उपयोग कैसे करते हैं?", rights: "मतदाता के अधिकार और कर्तव्य क्या हैं?" },
                 enableSpeech: "आवाज़ सहायक सक्षम करें", disableSpeech: "आवाज़ सहायक अक्षम करें", speechEnabled: "आवाज़ सहायक सक्षम।", speechDisabled: "आवाज़ सहायक अक्षम।",
+                thanksForFeedback: "प्रतिक्रिया के लिए धन्यवाद!",
+                addComment: "टिप्पणी जोड़ें (वैकल्पिक)...",
+                submitFeedback: "प्रस्तुत करें"
             },
             en: {
                 welcomeTitle: "Indian Election Advisor",
                 welcomeSubtitle: "Your personal, smart election assistant. Learn everything about India's electoral process.",
                 welcomeButton: "Let's Get Started",
-                title: "🗳 Indian Election Advisor",
+                title: "🗳️ Indian Election Advisor",
                 subtitle: "Interactive Election Guide - Your Smart Election Assistant",
                 topicsTitle: "🚀 Quick Election Topics",
                 topicRegText: "Voter Registration<br>Voter Registration Process",
@@ -297,7 +560,7 @@
                 topicScheduleText: "Election Schedule<br>Election Schedule",
                 topicEvmText: "EVM/VVPAT Usage<br>Voting Machine Guide",
                 topicRightsText: "Voter Rights<br>Voter Rights",
-                inputPlaceholder: "Type your election-related question here... 🗳",
+                inputPlaceholder: "Type your election-related question here... 🗳️",
                 sendBtn: "📤 Send",
                 voiceBtn: "🎤 Voice",
                 voiceBtnRecording: "🔴 Recording...",
@@ -306,10 +569,13 @@
                 footerPortal: "📱 Portal: nvsp.in",
                 questions: { registration: "What is the complete process for voter registration?", epic: "How to apply for an EPIC card?", pollingStation: "How to find my polling station?", schedule: "When are the next elections?", evm: "How to use EVM and VVPAT?", rights: "What are the rights and duties of a voter?" },
                 enableSpeech: "Enable Voice Assistant", disableSpeech: "Disable Voice Assistant", speechEnabled: "Voice assistant enabled.", speechDisabled: "Voice assistant disabled.",
+                thanksForFeedback: "Thanks for your feedback!",
+                addComment: "Add a comment (optional)...",
+                submitFeedback: "Submit"
             }
         };
 
-        // --- INITIALIZATION ---
+        // --- INITIALIZATION & SETUP FUNCTIONS (Unchanged) ---
         document.addEventListener('DOMContentLoaded', function() {
             initWelcomeScreen();
             initializeParticles();
@@ -363,7 +629,6 @@
                 sendMessageToServer("GREET_USER", true);
             }
         }
-        
         function setupLanguageSwitcher() {
             document.querySelectorAll('.lang-btn').forEach(button => {
                 button.addEventListener('click', function() {
@@ -395,8 +660,7 @@
                 speakText(feedbackText, true);
             });
         }
-        
-        // --- ACCESSIBILITY ---
+
         function speakText(text, isFeedback = false) {
             if ((!isSpeechEnabled && !isFeedback) || !window.speechSynthesis) return;
             const cleanText = text.replace(/<[^>]*>|\\|\//g, ' ').replace(/\s+/g, ' ').trim();
@@ -413,7 +677,6 @@
         }
 
         function handleEnterKey(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendUserMessage(); } }
-        
         function sendUserMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -423,6 +686,7 @@
             sendMessageToServer(message);
         }
 
+        // --- CORE CHAT LOGIC (Modified for Feedback) ---
         async function sendMessageToServer(message, isInitial = false) {
             if (!isInitial) showTypingIndicator();
             try {
@@ -434,20 +698,23 @@
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 
                 if (!isInitial) hideTypingIndicator();
-                const botMessageBubble = addMessage('bot', ''); 
+                const botMessageBubble = addMessage('bot', '', message);
+                const messageContentWrapper = botMessageBubble.querySelector('.message-bubble-content');
                 
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
-                let buffer = '';
+                let fullResponseText = '';
                 while (true) {
                     const { done, value } = await reader.read();
                     if (done) break;
-                    buffer += decoder.decode(value, { stream: true });
-                    botMessageBubble.innerHTML = formatMessageText(buffer);
+                    fullResponseText += decoder.decode(value, { stream: true });
+                    messageContentWrapper.innerHTML = formatMessageText(fullResponseText);
                     document.getElementById('messagesContainer').scrollTop = document.getElementById('messagesContainer').scrollHeight;
                 }
-                botMessageBubble.innerHTML = formatMessageText(buffer);
-                speakText(buffer);
+                
+                addFeedbackButtons(botMessageBubble);
+                speakText(fullResponseText);
+
             } catch (error) {
                 console.error('Error:', error);
                 if (!isInitial) hideTypingIndicator();
@@ -456,15 +723,24 @@
             }
         }
 
-        // --- UI HELPERS ---
-        function addMessage(sender, text) {
+        // --- UI & FEEDBACK HELPER FUNCTIONS ---
+        function addMessage(sender, text, userMessageForContext = '') {
             const container = document.getElementById('messagesContainer');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
             const avatar = sender === 'user' ? '👤' : '🤖';
             const messageBubble = document.createElement('div');
             messageBubble.className = 'message-bubble';
-            messageBubble.innerHTML = formatMessageText(text);
+            
+            const messageContentWrapper = document.createElement('div');
+            messageContentWrapper.className = 'message-bubble-content';
+            messageContentWrapper.innerHTML = formatMessageText(text);
+            messageBubble.appendChild(messageContentWrapper);
+
+            if (sender === 'bot') {
+                messageBubble.dataset.userQuery = userMessageForContext;
+            }
+            
             messageDiv.appendChild(document.createRange().createContextualFragment(`<div class="message-avatar">${avatar}</div>`));
             messageDiv.appendChild(messageBubble);
             container.appendChild(messageDiv);
@@ -473,8 +749,87 @@
             return messageBubble;
         }
 
-        function formatMessageText(text) { return text.replace(/\*(.?)\*/g, '<strong>$1</strong>').replace(/\*(.?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>'); }
-        
+        function addFeedbackButtons(bubbleElement) {
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.className = 'feedback-container';
+            
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'feedback-controls';
+
+            const positiveBtn = document.createElement('button');
+            positiveBtn.className = 'feedback-btn';
+            positiveBtn.innerHTML = '👍';
+            positiveBtn.onclick = () => showFeedbackForm('positive', bubbleElement, controlsDiv);
+
+            const negativeBtn = document.createElement('button');
+            negativeBtn.className = 'feedback-btn';
+            negativeBtn.innerHTML = '👎';
+            negativeBtn.onclick = () => showFeedbackForm('negative', bubbleElement, controlsDiv);
+
+            controlsDiv.appendChild(positiveBtn);
+            controlsDiv.appendChild(negativeBtn);
+
+            const formDiv = document.createElement('div');
+            formDiv.className = 'feedback-form';
+            
+            const commentInput = document.createElement('textarea');
+            commentInput.className = 'feedback-input';
+            commentInput.placeholder = uiStrings[currentLang].addComment;
+            commentInput.rows = 2;
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'feedback-submit-btn';
+            submitBtn.textContent = uiStrings[currentLang].submitFeedback;
+
+            formDiv.appendChild(commentInput);
+            formDiv.appendChild(submitBtn);
+            feedbackContainer.appendChild(controlsDiv);
+            feedbackContainer.appendChild(formDiv);
+            bubbleElement.appendChild(feedbackContainer);
+        }
+
+        function showFeedbackForm(feedbackType, bubbleElement, controlsDiv) {
+            controlsDiv.querySelectorAll('.feedback-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'default';
+            });
+            const selectedBtn = feedbackType === 'positive' ? controlsDiv.children[0] : controlsDiv.children[1];
+            selectedBtn.classList.add('selected');
+
+            const formDiv = controlsDiv.nextElementSibling;
+            formDiv.classList.add('visible');
+
+            const submitBtn = formDiv.querySelector('.feedback-submit-btn');
+            const commentInput = formDiv.querySelector('.feedback-input');
+
+            submitBtn.onclick = async () => {
+                const userMessage = bubbleElement.dataset.userQuery;
+                const botResponse = bubbleElement.querySelector('.message-bubble-content').innerText;
+                const comment = commentInput.value.trim();
+                
+                try {
+                    await fetch('/feedback', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_message: userMessage,
+                            bot_response: botResponse,
+                            feedback_type: feedbackType,
+                            comment: comment,
+                            language: currentLang
+                        })
+                    });
+                    
+                    const thanksMessage = document.createElement('span');
+                    thanksMessage.className = 'feedback-thanks';
+                    thanksMessage.textContent = uiStrings[currentLang].thanksForFeedback;
+                    controlsDiv.parentElement.innerHTML = '';
+                    controlsDiv.parentElement.appendChild(thanksMessage);
+
+                } catch (error) { console.error("Failed to send feedback:", error); }
+            };
+        }
+        function formatMessageText(text) { return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>'); }
         function showTypingIndicator() {
             if (isCurrentlyTyping) return; isCurrentlyTyping = true;
             const indicatorDiv = addMessage('bot', '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>').parentElement;
@@ -484,7 +839,6 @@
             const indicator = document.querySelector('.typing-indicator');
             if (indicator) indicator.remove(); isCurrentlyTyping = false;
         }
-        
         function initializeParticles() {
             const particlesBg = document.getElementById('particlesBg');
             const createParticle = () => {
@@ -494,9 +848,12 @@
                 setTimeout(() => { if (particle.parentNode) particle.parentNode.removeChild(particle); }, 8000);
             }; setInterval(createParticle, 300);
         }
-
         function updateProgressBar() { let p = 0; setInterval(() => { p = (p + Math.random() * 2) % 100; document.getElementById('progressBar').style.width = p + '%'; }, 100); }
-        
+        function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            document.body.classList.toggle('dark-mode', isDarkTheme);
+            localStorage.setItem('darkMode', isDarkTheme);
+        }
         function startVoiceRecognition() {
             if (!('webkitSpeechRecognition' in window)) { return alert('Voice recognition not supported.'); }
             if (isRecording) return;
@@ -508,6 +865,7 @@
             recognition.onerror = (e) => { console.error("Voice error:", e); isRecording = false; document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtn; };
             recognition.start();
         }
+
     </script>
 </body>
 </html>
