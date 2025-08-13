@@ -393,8 +393,40 @@ textarea {
     to { opacity: 1; transform: scale(1); }
 }
     </style>
+    
+<!-- Your big existing <style> block -->
+<style>
+  /* your existing CSS */
+</style>
+
+<!-- Add FAQ Button CSS here so it overrides old rules -->
+<style>
+  .faq-button {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    padding: 10px 16px;
+    background: #ff7a00;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1em;
+    transition: background 0.3s ease;
+    z-index: 1000;
+  }
+  .faq-button:hover {
+    background: #e86a00;
+  }
+</style>
+
 </head>
 <body>
+
+    <a href="https://www.eci.gov.in/faq" target="_blank" rel="noopener noreferrer" class="faq-button">
+  🗳️ FAQs
+</a>
+
     <!-- Feedback Floating Button -->
 <button class="feedback-fab" onclick="toggleFeedbackForm()">💬</button>
 
