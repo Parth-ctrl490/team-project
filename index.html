@@ -384,9 +384,6 @@ textarea {
 
 
 
-
-
-
 /* Animation */
 @keyframes fadeIn {
     from { opacity: 0; transform: scale(0.9); }
@@ -401,34 +398,121 @@ textarea {
 
 <!-- Add FAQ Button CSS here so it overrides old rules -->
 <style>
+  @keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+    50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8); }
+    100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
   .faq-button {
     position: fixed;
-    top: 15px;
-    left: 15px;
-    padding: 10px 16px;
-    background: #ff7a00;
+    top: 10px;
+    left: 10px;
+    padding: 14px 22px;
+    background: linear-gradient(270deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #ff9ff3);
+    background-size: 400% 400%;
     color: #fff;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1em;
-    transition: background 0.3s ease;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1.1em;
+    letter-spacing: 0.5px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
     z-index: 1000;
+    animation: bounceIn 0.6s ease-out, pulse 2s infinite, gradientMove 6s ease infinite;
   }
+
   .faq-button:hover {
-    background: #e86a00;
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .faq-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.3);
   }
 </style>
 
+<a href="your-faq-page.html" class="faq-button">❓ FAQs</a>
+
+
 </head>
 <body>
+
+
 
     <a href="https://www.eci.gov.in/faq" target="_blank" rel="noopener noreferrer" class="faq-button">
   🗳️ FAQs
 </a>
 
+
     <!-- Feedback Floating Button -->
+<style>
+  /* Bounce in animation when page loads */
+  @keyframes bounceIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  /* Glowing pulse animation */
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 rgba(0, 200, 255, 0.6); }
+    50% { box-shadow: 0 0 20px rgba(0, 200, 255, 0.9); }
+    100% { box-shadow: 0 0 0 rgba(0, 200, 255, 0.6); }
+  }
+
+  .feedback-fab {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.6em;
+    padding: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 200, 255, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: bounceIn 0.6s ease-out, pulse 2s infinite;
+    z-index: 1000;
+  }
+
+  .feedback-fab:hover {
+    transform: scale(1.15) rotate(10deg);
+    box-shadow: 0 6px 25px rgba(0, 200, 255, 0.8);
+  }
+
+  .feedback-fab:active {
+    transform: scale(0.95);
+  }
+</style>
+
+<!-- Floating Feedback Button -->
 <button class="feedback-fab" onclick="toggleFeedbackForm()">💬</button>
+
+<script>
+  function toggleFeedbackForm() {
+    alert("This would open/close your feedback form!");
+    // Here you can add code to show/hide your form
+  }
+</script>
+
 
 <!-- Feedback Form Popup -->
 <div class="feedback-popup" id="feedbackPopup">
@@ -905,5 +989,7 @@ function submitFeedback() {
         }
 
     </script>
+    
 </body>
+
 </html>
