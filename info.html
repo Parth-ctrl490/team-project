@@ -1,11 +1,136 @@
+import os
+from flask import Flask, render_template, request, jsonify, session, Response, stream_with_context
+from groq import Groq
+from dotenv import load_dotenv
+from langdetect import detect, DetectorFactory
+
+load_dotenv()
+
+app = Flask(__name__, template_folder='templates')
+app.config['SECRET_KEY'] = os.environ.get('flaskseckey', 'dev-secret-key')
+
+
+api_key = os.environ.get("GROQ_API_KEY")
+if not api_key:
+    raise ValueError("❌ Missing GROQ_API_KEY in .env file")
+
+client = Groq(api_key=api_key)
+
+GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama3-8b-8192")
+TEMPERATURE = float(os.environ.get("TEMPERATURE", 0.4))
+
+BASE_SYSTEM_PROMPT = """
+You are 'भारतीय चुनाव सलाहकार' – an AI assistant for all things related to the Indian election process.
+
+Your job:
+- Give step-by-step guidance for processes like voter registration, EPIC cards, polling info, schedules, EVM/VVPAT, rights, and nomination rules.
+- Be clear, practical, and easy to follow.
+- Respond only about Indian elections. If asked something else, refuse politely in the user’s language.
+- Format answers with bold headings, bullet points, numbered steps, and emojis for readability.
+"""
+
+LANGUAGE_CONFIG = {
+    'hi': {"instruction": "Language: Reply in Hindi with detailed guidance.", "refusal": "🚫 *माफ करें, मैं केवल भारतीय चुनाव प्रक्रिया के बारे में जानकारी दे सकता हूं।*"},
+    'en': {"instruction": "Language: Reply in English with detailed guidance.", "refusal": "🚫 *I can only provide information about Indian election processes.*"},
+    'bn': {"instruction": "Language: Reply in Bengali with detailed guidance.", "refusal": "🚫 *আমি শুধুমাত্র ভারতীয় নির্বাচন প্রক্রিয়া সম্পর্কে তথ্য দিতে পারি।*"},
+    'mr': {"instruction": "Language: Reply in Marathi with detailed guidance.", "refusal": "🚫 *मी फक्त भारतीय निवडणूक प्रक्रियेबद्दल माहिती देऊ शकतो.*"},
+    'gu': {"instruction": "Language: Reply in Gujarati with detailed guidance.", "refusal": "🚫 *હું ફક્ત ભારતીય ચૂંટણી પ્રક્રિયા વિશે માહિતી આપી શકું છું.*"},
+    'pa': {"instruction": "Language: Reply in Punjabi with detailed guidance.", "refusal": "🚫 *ਮੈਂ ਸਿਰਫ਼ ਭਾਰਤੀ ਚੋਣ ਪ੍ਰਕਿਰਿਆ ਬਾਰੇ ਜਾਣਕਾਰੀ ਦੇ ਸਕਦਾ ਹਾਂ।*"},
+    'ur': {"instruction": "Language: Reply in Urdu (Roman script) with detailed guidance.", "refusal": "🚫 *Main sirf Bharatiya election process ke bare mein maloomaat de sakta hun.*"},
+    'or': {"instruction": "Language: Reply in Odia with detailed guidance.", "refusal": "🚫 *ମୁଁ କେବଳ ଭାରତୀୟ ନିର୍ବାଚନ ପ୍ରକ୍ରିୟା ବିଷୟରେ ସୂଚନା ଦେଇପାରେ।*"},
+    'as': {"instruction": "Language: Reply in Assamese with detailed guidance.", "refusal": "🚫 *মই কেৱল ভাৰতীয় নিৰ্বাচন প্ৰক্ৰিয়াৰ বিষয়ে তথ্য দিব পাৰো।*"},
+    'ks': {"instruction": "Language: Reply in Kashmiri (Roman script) with detailed guidance.", "refusal": "🚫 *Bi sirf Bharatiya election process baaras jaankaari dith shakaan.*"},
+    'kok': {"instruction": "Language: Reply in Konkani with detailed guidance.", "refusal": "🚫 *हांव फकत भारतीय निवडणुकेच्या प्रक्रियेविशीं माहिती दिवंक शकतां.*"},
+    'ne': {"instruction": "Language: Reply in Nepali with detailed guidance.", "refusal": "🚫 *म केवल भारतीय चुनाव प्रक्रियाको बारेमा जानकारी दिन सक्छु।*"},
+    'ta': {"instruction": "Language: Reply in Tamil with detailed guidance.", "refusal": "🚫 *நான் இந்திய தேர்தல் செயல்முறைகளைப் பற்றி மட்டுமே தகவல் அளிக்க முடியும்.*"},
+    'te': {"instruction": "Language: Reply in Telugu with detailed guidance.", "refusal": "🚫 *నేను భారతీయ ఎన్నికల ప్రక్రియల గురించి మాత్రమే సమాచారం అందించగలను.*"},
+    'kn': {"instruction": "Language: Reply in Kannada with detailed guidance.", "refusal": "🚫 *ನಾನು ಭಾರತೀಯ ಚುನಾವಣಾ ಪ್ರಕ್ರಿಯೆಗಳ ಬಗ್ಗೆ ಮಾತ್ರ ಮಾಹಿತಿ ನೀಡಬಲ್ಲೆ.*"},
+    'ml': {"instruction": "Language: Reply in Malayalam with detailed guidance.", "refusal": "🚫 *എനിക്ക് ഇന്ത്യൻ തിരഞ്ഞെടുപ്പ് പ്രക്രിയകളെ കുറിച്ച് മാത്രമേ വിവരങ്ങൾ നൽകാൻ കഴിയൂ.*"},
+}
+
+def get_system_prompt(lang_code: str) -> str:
+    """Merge the base prompt with the language-specific instructions."""
+    config = LANGUAGE_CONFIG.get(lang_code, LANGUAGE_CONFIG['hi'])
+    return f"{BASE_SYSTEM_PROMPT.strip()}\n{config['instruction']}"
+
 @app.route('/')
 def home():
-    session.pop('chat_history', None)  # Reset history on fresh load
-    return '''
-    <h1>Election Bot</h1>
-    <a href="https://your-site.com/faqs" target="_blank" rel="noopener"
-       style="padding:8px 14px;border-radius:8px;border:1px solid #ddd;
-              text-decoration:none;font-weight:bold;">
-       FAQs
-    </a>
-    '''
+    session.pop('chat_history', None) 
+    return render_template('index.html')
+
+@app.route('/feedback', methods=['POST'])
+def feedback():
+    """Receive user feedback (not stored permanently in this version)."""
+    try:
+        data = request.json or {}
+        app.logger.info(f"Feedback: {data}")
+        return jsonify({'status': 'success', 'message': 'Feedback received'})
+    except Exception as e:
+        app.logger.error(f"Feedback error: {e}")
+        return jsonify({'error': 'Could not process feedback'}), 500
+
+DetectorFactory.seed = 0 
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    """Main chat endpoint with language detection and Groq streaming."""
+    user_message = request.json.get("message", "").strip()
+    frontend_lang = request.json.get("language", "").lower()
+
+    if not user_message:
+        return jsonify({"error": "No message provided"}), 400
+
+    try:
+        detected_lang = detect(user_message)
+    except:
+        detected_lang = 'hi'
+
+    lang_code = (frontend_lang or detected_lang or 'hi').lower()
+    if lang_code not in LANGUAGE_CONFIG:
+        lang_code = 'hi'
+
+    chat_history = session.get("chat_history", [])
+    messages_for_api = [
+        {"role": "system", "content": get_system_prompt(lang_code)},
+        *chat_history,
+        {"role": "user", "content": user_message}
+    ]
+
+    def generate_chunks():
+        full_response = ""
+        try:
+            stream = client.chat.completions.create(
+                messages=messages_for_api,
+                model=GROQ_MODEL,
+                temperature=TEMPERATURE,
+                stream=True,
+                max_tokens=2048
+            )
+            for chunk in stream:
+                token = chunk.choices[0].delta.content
+                if token:
+                    full_response += token
+                    yield token
+
+        
+            chat_history.extend([
+                {"role": "user", "content": user_message},
+                {"role": "assistant", "content": full_response}
+            ])
+            session["chat_history"] = chat_history[-10:]
+        except Exception as e:
+            app.logger.error(f"Groq API error: {e}")
+            yield "\n[Error: Could not process your request]"
+
+    return Response(stream_with_context(generate_chunks()), mimetype="text/plain")
+
+@app.route('/reset', methods=['POST'])
+def reset_chat():
+    """Clear chat history."""
+    session.pop('chat_history', None)
+    return jsonify({'status': 'success', 'message': 'Chat history cleared.'})
+
+if __name__ == '__main__':
+    is_production = os.environ.get('FLASK_ENV') == 'production'
+    app.run(debug=not is_production, port=5001)
+
