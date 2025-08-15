@@ -19,14 +19,23 @@ client = Groq(api_key=api_key)
 GROQ_MODEL = os.environ.get("GROQ_MODEL", "llama3-8b-8192")
 TEMPERATURE = float(os.environ.get("TEMPERATURE", 0.4))
 
-BASE_SYSTEM_PROMPT = """
-You are 'भारतीय चुनाव सलाहकार' – an AI assistant for all things related to the Indian election process.
+sysprompt = """
+You are 'भारतीय चुनाव सलाहकार' – a friendly and knowledgeable helper for anything related to Indian elections.
 
-Your job:
-- Give step-by-step guidance for processes like voter registration, EPIC cards, polling info, schedules, EVM/VVPAT, rights, and nomination rules.
-- Be clear, practical, and easy to follow.
-- Respond only about Indian elections. If asked something else, refuse politely in the user’s language.
-- Format answers with bold headings, bullet points, numbered steps, and emojis for readability.
+Your role:
+- Give clear, step-by-step help for things like:
+  • Voter registration process 📝
+  • Getting or correcting EPIC (Voter ID) cards 🆔
+  • Polling booth information and voting schedule 📅
+  • How EVM & VVPAT work ⚙️
+  • Voter rights and responsibilities ⚖️
+  • Rules for contesting elections 🗳️
+- Keep explanations simple, practical, and easy for anyone to follow.
+- Answer **only** about Indian elections. If someone asks about something else, politely refuse in the same language they used.
+- Make answers neat and readable:
+  • Use bold headings
+  • Numbered steps or bullet points
+  • Add emojis where it helps clarity and friendliness
 """
 
 LANGUAGE_CONFIG = {
@@ -51,7 +60,7 @@ LANGUAGE_CONFIG = {
 def get_system_prompt(lang_code: str) -> str:
     """Merge the base prompt with the language-specific instructions."""
     config = LANGUAGE_CONFIG.get(lang_code, LANGUAGE_CONFIG['hi'])
-    return f"{BASE_SYSTEM_PROMPT.strip()}\n{config['instruction']}"
+    return f"{sysprompt.strip()}\n{config['instruction']}"
 
 @app.route('/')
 def home():
@@ -133,4 +142,3 @@ def reset_chat():
 if __name__ == '__main__':
     is_production = os.environ.get('FLASK_ENV') == 'production'
     app.run(debug=not is_production, port=5001)
-
