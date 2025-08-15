@@ -21,6 +21,7 @@ TEMPERATURE = float(os.environ.get("TEMPERATURE", 0.4))
 
 sysprompt = """
 You are 'भारतीय चुनाव सलाहकार' – a friendly and knowledgeable helper for anything related to Indian elections.
+Answer ONLY in {difflang[lang_code]['name']} language.
 
 Your role:
 - Give clear, step-by-step help for things like:
@@ -38,7 +39,7 @@ Your role:
   • Add emojis where it helps clarity and friendliness
 """
 
-LANGUAGE_CONFIG = {
+difflang = {
     'hi': {"instruction": "Language: Reply in Hindi with detailed guidance.", "refusal": "🚫 *माफ करें, मैं केवल भारतीय चुनाव प्रक्रिया के बारे में जानकारी दे सकता हूं।*"},
     'en': {"instruction": "Language: Reply in English with detailed guidance.", "refusal": "🚫 *I can only provide information about Indian election processes.*"},
     'bn': {"instruction": "Language: Reply in Bengali with detailed guidance.", "refusal": "🚫 *আমি শুধুমাত্র ভারতীয় নির্বাচন প্রক্রিয়া সম্পর্কে তথ্য দিতে পারি।*"},
@@ -57,9 +58,9 @@ LANGUAGE_CONFIG = {
     'ml': {"instruction": "Language: Reply in Malayalam with detailed guidance.", "refusal": "🚫 *എനിക്ക് ഇന്ത്യൻ തിരഞ്ഞെടുപ്പ് പ്രക്രിയകളെ കുറിച്ച് മാത്രമേ വിവരങ്ങൾ നൽകാൻ കഴിയൂ.*"},
 }
 
-def get_system_prompt(lang_code: str) -> str:
+def getsysprompt(lang_code: str) -> str:
     """Merge the base prompt with the language-specific instructions."""
-    config = LANGUAGE_CONFIG.get(lang_code, LANGUAGE_CONFIG['hi'])
+    config = difflang.get(lang_code, difflang['hi'])
     return f"{sysprompt.strip()}\n{config['instruction']}"
 
 @app.route('/')
@@ -95,12 +96,12 @@ def chat():
         detected_lang = 'hi'
 
     lang_code = (frontend_lang or detected_lang or 'hi').lower()
-    if lang_code not in LANGUAGE_CONFIG:
+    if lang_code not in difflang:
         lang_code = 'hi'
 
     chat_history = session.get("chat_history", [])
     messages_for_api = [
-        {"role": "system", "content": get_system_prompt(lang_code)},
+        {"role": "system", "content": getsysprompt(lang_code)},
         *chat_history,
         {"role": "user", "content": user_message}
     ]
@@ -135,9 +136,13 @@ def chat():
 
 @app.route('/reset', methods=['POST'])
 def reset_chat():
-    """Clear chat history."""
-    session.pop('chat_history', None)
-    return jsonify({'status': 'success', 'message': 'Chat history cleared.'})
+    """Delete the saved conversation for the current session."""
+    if 'chat_history' in session:
+        session.pop('chat_history')
+    return jsonify({
+        "status": "success",
+        "message": "Chat history cleared successfully."
+    })
 
 
 if __name__ == '__main__':
