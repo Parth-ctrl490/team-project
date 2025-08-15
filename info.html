@@ -139,6 +139,11 @@ def reset_chat():
     session.pop('chat_history', None)
     return jsonify({'status': 'success', 'message': 'Chat history cleared.'})
 
+
 if __name__ == '__main__':
-    is_production = os.environ.get('FLASK_ENV') == 'production'
-    app.run(debug=not is_production, port=5001)
+    currentenv = os.environ.get('flaskenv', '').lower()
+    production_mode = (currentenv == 'production')
+    app.run(
+        debug=not production_mode,
+        port=5001
+    )
