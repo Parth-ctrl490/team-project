@@ -1,0 +1,9 @@
+body {
+    background: linear-gradient(to right, skyblue, lightgreen, pink, violet, cyan);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 400% 400%;
+    animation: gradientMove 8s ease infinite;
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
