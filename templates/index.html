@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <link rel="stylesheet" href="asd.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗳️ VoteBuddy- Interactive Election Guide</title>
+
+    
+
+  <div style="text-align: center; margin-top: 20px;">
+    
+    <button style="background: linear-gradient(270deg, skyblue, lightgreen, pink, violet, cyan); 
+    border: none; border-radius: 10px; padding: 10px 25px; color: white; font-weight: bolder; 
+    text-shadow: 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff; transition: transform 0.3s ease, box-shadow 0.3s ease;" @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}.yoyo a {
+    color: white;              
+    text-decoration: none;     
+    display: inline-block;     
+    width: 100%;
+    height: 100%;
+}
+.yoyo a:hover {
+    color: rgb(9, 103, 108);          
+    text-decoration: none;    
+}
+  
+    class="yoyo">
+
+        <a  href="{{ url_for('review') }}">HOME</a>
+    </button>
+</div>
+
+    <a href="https://your-feedback-form-link.com" target="_blank" class="feedback-fab"
+        title="Kindly share your Feedback">
+        💬</a>
+        
+    <style>
+        .feedback-fab {
+            position: fixed;
+
+            bottom: 21px;
+            right: 21px;
+
+            background: var(--primary-orange);
+
+            color: rgb(182, 238, 245);
+
+            font-size: 1.5rem;
+
+            padding: 12px 16px;
+            border-radius: 50%;
+
+            /* border: none; */
+            box-shadow: 0 4px 11px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+
+            z-index: 9999;
+
+            transition: all 0.5s ease;
+        }
+
+        .feedback-fab:hover {
+            background: var(--primary-green);
+            transform: scale(1.1)rotate(4deg);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+
+            --primary-orange: #ff7f3f;
+            --primary-blue: #4197d0;
+            --primary-green: #22bd63;
+            --primary-purple: #9a5db2;
+
+            --glass-light: rgba(255, 255, 255, 0.15);
+            --glass-border-light: rgba(255, 255, 255, 0.3);
+
+            --text-primary-light: #2c3e50;
+            --text-secondary-light: #7f8c8d;
+
+
+            --glass-dark: rgba(0, 0, 0, 0.3);
+            --glass-border-dark: rgba(255, 255, 255, 0.1);
+            --text-primary-dark: #ecf0f1;
+            --text-secondary-dark: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            background: linear-gradient(-40deg, #da7510, #ea5c93, #48b2d8, #48d3b3);
+
+
+            background-size: 410% 410%;
+            animation: gradientFlow 12s ease infinite;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(-50deg, #2b2b4c, #1d2a4c, #0f3460, #533483);
+            background-size: 410% 410%;
+            animation: gradientFlow 10s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% {
+                background-position: 0% 45%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .particles-bg {
+            position: fixed;
+            top: 1;
+            left: 1;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: floatParticle 8s linear infinite;
+        }
+
+        @keyframes floatParticle {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            to {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        #welcomeScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+            background: rgba(260, 260, 260, 0.2);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(34px);
+
+            transition: opacity 0.6 ease-in, visibility 0.9s;
+            text-align: center;
+            padding: 26px;
+        }
+
+        body.dark-mode #welcomeScreen {
+            background: rgba(0, 0, 0, 0.10);
+        }
+
+        #welcomeScreen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .welcome-icon {
+            font-size: 6rem;
+            animation: iconBounce 4s ease-in-out infinite;
+        }
+
+        #welcomeTitle {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-top: 20px;
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-purple));
+
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #welcomeSubtitle {
+            font-size: 1.1rem;
+            margin-top: 11px;
+            max-width: 550px;
+            color: var(--text-primary-light);
+        }
+
+
+        body.dark-mode #welcomeSubtitle {
+            color: var(--text-primary-dark);
+        }
+
+        #startButton {
+
+            margin-top: 40px;
+            padding: 18px 45px;
+
+
+            font-size: 1.1rem;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border: none;
+            border-radius: 50px;
+
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        #startButton:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4);
+        }
+
+        .app-container {
+            position: relative;
+
+            z-index: 1;
+
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out, visibility 0.8s;
+        }
+
+        .app-container.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .header {
+            background: var(--glass-light);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border-light);
+            border-radius: 25px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+
+
+            overflow: hidden;
+            /* text-transform: uppercase; */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .header {
+            background: var(--glass-dark);
+            border: 1px solid var(--glass-border-dark);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotateGlow 10s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotateGlow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-orange), var(--primary-purple));
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes titlePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .header-subtitle {
+            color: var(--text-primary-light);
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        body.dark-mode .header-subtitle {
+            color: var(--text-primary-dark);
+        }
+
+        .header-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: var(--glass-light);
+
+            border: 2px solid var(--glass-border-light);
+            color: var(--text-primary-light);
+            padding: 12px;
+            border-radius: 50%;
+
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            width: 50px;
+
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        .lang-selector-group {
+            display: flex;
+            gap: 5px;
+            background: var(--glass-light);
+            border-radius: 25px;
+            padding: 5px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-primary-light);
+            padding: 8px 15px;
+
+            /* border: 2px solid transparent; */
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .control-btn,
+        body.dark-mode .lang-selector-group {
+            background: var(--glass-dark);
+        }
+
+        body.dark-mode .lang-btn {
+            color: var(--text-primary-dark);
+        }
+
+        .control-btn:hover,
+        .lang-btn:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .lang-btn.active,
+        .control-btn.active {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            border-color: transparent;
+        }
+
+        .topics-section {
+            background: var(--glass-light);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border-light);
+
+
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .topics-section {
+            background: var(--glass-dark);
+            border: 1px solid var(--glass-border-dark);
+        }
+
+        .topics-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary-light);
+            text-align: center;
+        }
+
+        body.dark-mode .topics-title {
+            color: var(--text-primary-dark);
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .topic-card {
+            background: var(--glass-light);
+            /* border: 2px solid transparent; */
+
+            backdrop-filter: blur(15px);
+
+            border: 2px solid var(--glass-border-light);
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            color: var(--text-primary-light);
+        }
+
+        body.dark-mode .topic-card {
+            background: var(--glass-dark);
+
+            border: 2px solid var(--glass-border-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary-blue);
+        }
+
+        .topic-card:hover::before {
+            left: 100%;
+        }
+
+        .topic-icon {
+            font-size: 2.5rem;
+
+            display: block;
+
+            margin-bottom: 15px;
+            animation: iconBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes iconBounce {
+
+            0%,
+            20%,
+
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .topic-text {
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .chat-section {
+            flex: 1;
+            background: var(--glass-light);
+            backdrop-filter: blur(20px);
+
+            border: 1px solid var(--glass-border-light);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
+        }
+
+        body.dark-mode .chat-section {
+            background: var(--glass-dark);
+            border: 1px solid var(--glass-border-dark);
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+
+
+            padding: 30px;
+
+            display: flex;
+            flex-direction: column;
+
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+
+            align-items: flex-start;
+
+            opacity: 0;
+
+            animation: messageSlideIn 0.6s ease forwards;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-avatar {
+            font-size: 1.8rem;
+
+            margin: 0 15px;
+
+            animation: avatarWiggle 4s ease-in-out infinite;
+        }
+
+        @keyframes avatarWiggle {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-5deg);
+            }
+
+            75% {
+                transform: rotate(5deg);
+            }
+        }
+
+        .message-bubble {
+            max-width: 75%;
+
+            padding: 20px 25px;
+
+            border-radius: 25px;
+
+            line-height: 1.6;
+
+            word-wrap: break-word;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-purple));
+            color: white;
+            border-radius: 25px 25px 5px 25px;
+            box-shadow: 0 8px 25px rgba(255, 127, 63, 0.3);
+        }
+
+        .message.bot .message-bubble {
+            background: var(--glass-light);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border-light);
+            border-radius: 25px 25px 25px 5px;
+            color: var(--text-primary-light);
+        }
+
+        body.dark-mode .message.bot .message-bubble {
+            background: var(--glass-dark);
+            border: 2px solid var(--glass-border-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .message.bot.typing-indicator .message-bubble {
+            background: none;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+
+        .typing-bubble {
+            background: var(--glass-light);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--glass-border-light);
+            border-radius: 25px;
+            padding: 20px 25px;
+            display: flex;
+            gap: 8px;
+        }
+
+        body.dark-mode .typing-bubble {
+            background: var(--glass-dark);
+            border: 2px solid var(--glass-border-dark);
+        }
+
+        .typing-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0s;
+        }
+
+        @keyframes typingAnimation {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        .input-section {
+            padding: 30px;
+            background: var(--glass-light);
+            /* background-color: #61d6bf; */
+            backdrop-filter: blur(20px);
+            border-top: 2px solid var(--glass-border-light);
+        }
+
+        body.dark-mode .input-section {
+            background: var(--glass-dark);
+            border-top: 2px solid var(--glass-border-dark);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 18px 25px;
+            border: 3px solid var(--glass-border-light);
+            border-radius: 25px;
+            background: var(--glass-light);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary-light);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .message-input {
+            border: 3px solid var(--glass-border-dark);
+            background: var(--glass-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .message-input:focus {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
+        }
+
+        .message-input::placeholder {
+            color: var(--text-secondary-light);
+        }
+
+        body.dark-mode .message-input::placeholder {
+            color: var(--text-secondary-dark);
+        }
+
+        .action-btn {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            min-width: 80px;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+        }
+
+        .voice-btn {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-info {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            background: var(--glass-light);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border-light);
+            /* padding: 10px; */
+
+            padding: 12px 20px;
+            border-radius: 20px;
+            color: var(--text-primary-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .info-item {
+            background: var(--glass-dark);
+            border: 1px solid var(--glass-border-dark);
+            color: var(--text-primary-dark);
+        }
+
+        .info-item:hover {
+            /* border: 2px solid var(--primary-blue); */
+            /* transform: translateX(5px); */
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-orange), var(--primary-purple));
+            width: 0;
+            z-index: 9999;
+            transition: width 0.3s ease;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: 10px;
+        }
+
+        strong {
+            font-weight: 700;
+            color: var(--primary-orange);
+        }
+
+        body.dark-mode strong {
+            color: #db8c17;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
+                gap: 15px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header-title {
+                font-size: 1.8rem;
+            }
+
+            .header-controls {
+                position: static;
+                margin-top: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .input-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .footer-info {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .message-bubble {
+                max-width: 90%;
+            }
+        }
+
+        .feedback-container {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--glass-border-light);
+        }
+
+        body.dark-mode .feedback-container {
+            border-top-color: var(--glass-border-dark);
+        }
+
+        .feedback-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .feedback-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            opacity: 0.7;
+        }
+
+        body.dark-mode .feedback-btn {
+            color: var(--text-secondary-dark);
+        }
+
+        .feedback-btn:hover {
+            transform: scale(1.25);
+            opacity: 1;
+        }
+
+        .feedback-btn.selected {
+            transform: scale(1.25);
+            opacity: 1;
+        }
+
+        .feedback-form {
+            max-height: 0;
+            padding: 0;
+            opacity: 0;
+            /* transform: translateY(-10px); */
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out,
+                opacity 0.5s ease-in-out,
+                margin-top 0.5s ease-in-out;
+            margin-top: 0;
+        }
+
+        .feedback-form.visible {
+            max-height: 150px;
+            opacity: 1;
+            margin-top: 15px;
+        }
+
+        .feedback-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px solid var(--glass-border-light);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary-light);
+            font-family: inherit;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        body.dark-mode .feedback-input {
+            border-color: var(--glass-border-dark);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--text-primary-dark);
+        }
+
+        .feedback-submit-btn {
+            padding: 8px 20px;
+
+            /* transform: translateY(5px); */
+            border: none;
+            border-radius: 15px;
+
+            background: var(--primary-green);
+            color: white;
+
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .feedback-submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .feedback-thanks {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary-light);
+        }
+
+        body.dark-mode .feedback-thanks {
+            color: var(--text-secondary-dark);
+        }
+
+
+        .feedback-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-orange);
+            color: white;
+            font-size: 1.8rem;
+            padding: 14px 17px;
+            border: none;
+            border-radius: 50%;
+            /* cursor: pointer; */
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            z-index: 9999;
+        }
+
+        .feedback-fab:hover {
+            transform: scale(1.15);
+        }
+
+
+        .feedback-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+
+        .feedback-card {
+            background: white;
+            padding: 25px;
+            width: 350px;
+            /* border: 2px solid var(--glass-border-light); */
+            /* transform: translateY(-10px); */
+            border: 2px solid var(--glass-border-light);
+            /* transform: translateY(-10px); */
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            animation: fadeIn 0.3s ease;
+        }
+
+
+        .star-rating {
+            font-size: 2rem;
+            color: lightgray;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        .star-rating span:hover,
+        .star-rating span.active {
+            color: gold;
+            transition: color 0.2s;
+        }
+
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            background: var(--primary-orange);
+            color: white;
+            /* \end{code} */
+            padding: 8px 15px;
+
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-green);
+        }
+
+        .cancel-btn {
+            background: #ccc;
+            color: black;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .cancel-btn:hover {
+            background: #999;
+        }
+
+
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+
+
+    <style>
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .faq-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 14px 22px;
+            background: linear-gradient(270deg, #ff6b6b, #feca57, #48dbfb, #1dd1a1, #ff9ff3);
+            background-size: 400% 400%;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: bounceIn 0.6s ease-out, pulse 2s infinite,
+             gradientMove 6s ease infinite;
+        }
+
+        .faq-button:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.8);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .faq-button:active {
+            transform: scale(0.95);
+            box-shadow: 0 3px 10px rgba(255, 255, 255, 0.3);
+        }
+    </style>
+
+    <a href="your-faq-page.html" class="faq-button">❓ FAQs</a>
+  
+</head>
+
+<body>
+
+
+
+    <a href="https://www.eci.gov.in/faq" target="_blank" rel="noopener noreferrer" class="faq-button">
+        🗳️ FAQs
+    </a>
+
+    <style>
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 rgba(0, 200, 255, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(0, 200, 255, 0.9);
+            }
+
+            100% {
+                box-shadow: 0 0 0 rgba(0, 200, 255, 0.6);
+            }
+        }
+
+        .feedback-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+
+            border: none;
+            border-radius: 50%;
+            font-size: 1.6em;
+            padding: 16px;
+            cursor: pointer;
+
+            box-shadow: 0 4px 15px rgba(0, 200, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: bounceIn 0.6s ease-out, pulse 2s infinite;
+            z-index: 1000;
+        }
+
+        .feedback-fab:hover {
+            transform: scale(1.15) rotate(10deg);
+            box-shadow: 0 6px 25px rgba(0, 200, 255, 0.8);
+        }
+
+        .feedback-fab:active {
+            transform: scale(0.95);
+        }
+    </style>
+
+    <button class="feedback-fab" onclick="toggleFeedbackForm()">💬</button>
+
+    <script>
+        function toggleFeedbackForm() {
+            alert("This would open/close your feedback form!");
+
+        }
+    </script>
+
+
+    <div class="feedback-popup" id="feedbackPopup">
+        <div class="feedback-card">
+
+            <h2>We value your feedback</h2>
+            <p>Your feedback helps us improve our services.</p>
+            <p>Rate your experience and share your thoughts.</p>
+
+            <div class="star-rating" id="starRating">
+                <span data-value="1">★</span>
+                <span data-value="2">★</span>
+                <span data-value="3">★</span>
+                <span data-value="4">★</span>
+                <span data-value="5">★</span>
+            </div>
+
+
+            <textarea id="feedbackComment" placeholder="Write your feedback here...">
+
+            </textarea>
+
+
+            <button class="submit-btn" onclick="submitFeedback()">Submit Feedback</button>
+            <button class="cancel-btn" onclick="toggleFeedbackForm()">Cancel</button>
+        </div>
+    </div>
+    <div class="particles-bg" id="particlesBg"></div>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div id="welcomeScreen">
+        <div class="welcome-icon">🗳</div>
+        <h1 id="welcomeTitle"></h1>
+        <p id="welcomeSubtitle"></p>
+        <button id="startButton"></button>
+    </div>
+
+    <div class="app-container">
+        <header class="header">
+            <h1 class="header-title" id="headerTitle"></h1>
+            <p class="header-subtitle" id="headerSubtitle"></p>
+            <div class="header-controls">
+                <div class="lang-selector-group">
+                    <button class="lang-btn active" data-lang="hi">हिन्दी</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+                <button class="control-btn" id="speechToggle" aria-label="Enable Voice Assistant">
+                    <span id="speechIcon">🔇</span>
+                </button>
+                <button class="control-btn" id="themeToggle" aria-label="Toggle Dark Mode">🌙</button>
+            </div>
+        </header>
+
+        <section class="topics-section">
+            <h2 class="topics-title" id="topicsTitle"></h2>
+            <div class="topics-grid">
+                <div class="topic-card" onclick="selectTopic('registration')">
+
+                    <span class="topic-icon">📝</span>
+
+                    <div class="topic-text" id="topicRegText"></div>
+                </div>
+                <div class="topic-card" onclick="selectTopic('epic')">
+
+                    <span class="topic-icon">🆔</span>
+                    <div class="topic-text" id="topicEpicText"></div>
+                </div>
+                <div class="topic-card" onclick="selectTopic('pollingStation')">
+                    <span class="topic-icon">📍</span>
+                    <div class="topic-text" id="topicStationText"></div>
+                </div>
+                <div class="topic-card" onclick="selectTopic('schedule')">
+                    <span class="topic-icon">📅</span>
+                    <div class="topic-text" id="topicScheduleText"></div>
+                </div>
+                <div class="topic-card" onclick="selectTopic('evm')"><span class="topic-icon">🗳</span>
+                    <div class="topic-text" id="topicEvmText"></div>
+                </div>
+                <div class="topic-card" onclick="selectTopic('rights')"><span class="topic-icon">⚖</span>
+                    <div class="topic-text" id="topicRightsText"></div>
+                </div>
+            </div>
+        </section>
+
+        <main class="chat-section">
+            <div class="messages-container" id="messagesContainer"></div>
+            <div class="input-section">
+                <div class="input-row">
+
+                    <input type="text" class="message-input" id="messageInput" onkeypress="handleEnterKey(event)">
+                    <button class="action-btn send-btn" onclick="sendUserMessage()" id="sendBtn"></button>
+                    <button class="action-btn voice-btn" onclick="startVoiceRecognition()" id="voiceBtn"></button>
+                </div>
+                <div class="footer-info">
+                    <div class="info-item" id="footerHelpline"></div>
+                    <div class="info-item" id="footerWebsite"></div>
+                    <div class="info-item" id="footerPortal"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selectedRating = 0;
+
+
+        function toggleFeedbackForm() {
+            const popup = document.getElementById('feedbackPopup');
+            popup.style.display = (popup.style.display === 'flex') ? 'none' : 'flex';
+            if (popup.style.display === 'flex') {
+                popup.style.justifyContent = 'center';
+                popup.style.alignItems = 'center';
+            }
+        }
+
+        document.querySelectorAll('#starRating span').forEach(star => {
+            star.addEventListener('click', function () {
+                selectedRating = this.dataset.value;
+                document.querySelectorAll('#starRating span').forEach(s => s.classList.remove('active'));
+                this.classList.add('active');
+                let prev = this.previousElementSibling;
+                while (prev) {
+                    prev.classList.add('active');
+                    prev = prev.previousElementSibling;
+                }
+            });
+
+        });
+
+
+        function submitFeedback() {
+            const comment = document.getElementById('feedbackComment').value.trim();
+            if (selectedRating === 0) {
+                alert("Please select a rating!");
+                return;
+            }
+            if (!comment) {
+                alert("Please enter your feedback!");
+                return;
+            }
+
+            console.log("Rating:", selectedRating);
+            console.log("Comment:", comment);
+
+            alert("Thank you for your feedback! ⭐" + selectedRating);
+            toggleFeedbackForm();
+        }
+
+        let isCurrentlyTyping = false, isDarkTheme = false, isRecording = false, currentLang = 'hi', isSpeechEnabled = false;
+
+
+        const uiStrings = {
+            hi: {
+                welcomeTitle: "VoteBuddy",
+                welcomeSubtitle: "आपका व्यक्तिगत, स्मार्ट चुनाव सहायक। भारत की चुनावी प्रक्रिया के बारे में सब कुछ जानें।",
+                welcomeButton: "चलिए शुरू करें",
+                title: "🗳️ VoteBuddy",
+
+                subtitle: "Interactive Election Guide - आपका स्मार्ट चुनाव सहायक",
+                topicsTitle: "🚀 त्वरित चुनाव विषय",
+                topicRegText: "Voter Registration<br>मतदाता पंजीकरण प्रक्रिया",
+                topicEpicText: "EPIC Card Application<br>पहचान पत्र आवेदन",
+
+                topicStationText: "Find Polling Station<br>मतदान केंद्र खोजें",
+                topicScheduleText: "Election Schedule<br>चुनाव कार्यक्रम",
+
+
+                topicEvmText: "EVM/VVPAT Usage<br>मतदान मशीन गाइड",
+                topicRightsText: "Voter Rights<br>मतदाता अधिकार",
+                inputPlaceholder: "अपना चुनाव संबंधी प्रश्न यहाँ लिखें... 🗳️",
+                sendBtn: "📤 भेजें",
+                voiceBtn: "🎤 बोलें",
+
+
+                voiceBtnRecording: "🔴 रिकॉर्डिंग...",
+                footerHelpline: "📞 हेल्पलाइन: 1950",
+                footerWebsite: "🌐 वेबसाइट: eci.gov.in",
+                footerPortal: "📱 पोर्टल: nvsp.in",
+                questions: {
+                    registration: "मतदाता पंजीकरण की संपूर्ण प्रक्रिया क्या है?",
+                    epic: "EPIC कार्ड के लिए आवेदन कैसे करें?",
+                    pollingStation: "अपना मतदान केंद्र कैसे खोजें?",
+                    schedule: "अगले चुनाव कब होंगे?",
+
+                    evm: "EVM और VVPAT का उपयोग कैसे करते हैं?",
+
+                    rights: "मतदाता के अधिकार और कर्तव्य क्या हैं?"
+                },
+                enableSpeech: "आवाज़ सहायक सक्षम करें",
+                disableSpeech: "आवाज़ सहायक अक्षम करें",
+                speechEnabled: "आवाज़ सहायक सक्षम।",
+
+                speechDisabled: "आवाज़ सहायक अक्षम।",
+                thanksForFeedback: "प्रतिक्रिया के लिए धन्यवाद!",
+                addComment: "टिप्पणी जोड़ें (वैकल्पिक)...",
+                submitFeedback: "प्रस्तुत करें"
+            },
+            en: {
+                welcomeTitle: "VoteBuddy",
+                welcomeSubtitle: "Your personal, smart election assistant. Learn everything about India's electoral process.",
+                welcomeButton: "Let's Get Started",
+                title: "🗳️ VoteBuddy",
+                subtitle: "Interactive Election Guide - Your Smart Election Assistant",
+                topicsTitle: "🚀 Quick Election Topics",
+                topicRegText: "Voter Registration<br>Voter Registration Process",
+                topicEpicText: "EPIC Card Application<br>ID Card Application",
+                topicStationText: "Find Polling Station<br>Find Polling Station",
+
+                topicScheduleText: "Election Schedule<br>Election Schedule",
+                topicEvmText: "EVM/VVPAT Usage<br>Voting Machine Guide",
+                topicRightsText: "Voter Rights<br>Voter Rights",
+                inputPlaceholder: "Type your election-related question here... 🗳️",
+                sendBtn: "📤 Send",
+                voiceBtn: "🎤 Voice",
+
+                voiceBtnRecording: " Recording...",
+                footerHelpline: " Helpline: 1950",
+
+                footerWebsite: "Website: eci.gov.in",
+                footerPortal: " Portal: nvsp.in",
+                questions: {
+                    registration: "What is the complete process for voter registration?",
+                    epic: "How to apply for an EPIC card?",
+
+                    pollingStation: "How to find my polling station?",
+                    schedule: "When are the next elections?",
+                    evm: "How to use EVM and VVPAT?",
+                    rights: "What are the rights and duties of a voter?"
+                },
+                enableSpeech: "Enable Voice Assistant",
+                disableSpeech: "Disable Voice Assistant",
+
+                speechEnabled: "Voice assistant enabled.",
+                speechDisabled: "Voice assistant disabled.",
+                thanksForFeedback: "Thanks for your feedback!",
+                addComment: "Add a comment (optional)...",
+                submitFeedback: "Submit"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initWelcomeScreen();
+            initializeParticles();
+            setupThemeToggle();
+            setupLanguageSwitcher();
+            setupSpeechToggle();
+            updateUIForLanguage(currentLang, true);
+            updateProgressBar();
+        });
+
+
+        function initWelcomeScreen() {
+            const startButton = document.getElementById('startButton');
+            startButton.addEventListener('click', () => {
+                document.getElementById('welcomeScreen').classList.add('hidden');
+                document.querySelector('.app-container').classList.add('visible');
+                setTimeout(() => sendMessageToServer("GREET_USER", true), 500);
+            });
+        }
+
+        function updateUIForLanguage(lang, isInitialLoad = false) {
+            currentLang = lang;
+            const strings = uiStrings[lang];
+
+            document.getElementById('welcomeTitle').textContent = strings.welcomeTitle;
+            document.getElementById('welcomeSubtitle').textContent = strings.welcomeSubtitle;
+            document.getElementById('startButton').textContent = strings.welcomeButton;
+            document.documentElement.lang = lang;
+            document.title = strings.title;
+            document.getElementById('headerTitle').textContent = strings.title;
+            document.getElementById('headerSubtitle').textContent = strings.subtitle;
+            document.getElementById('themeToggle').innerHTML = isDarkTheme ? '☀' : '🌙';
+            document.getElementById('topicsTitle').textContent = strings.topicsTitle;
+            document.getElementById('topicRegText').innerHTML = strings.topicRegText;
+
+
+            document.getElementById('topicEpicText').innerHTML = strings.topicEpicText;
+            document.getElementById('topicStationText').innerHTML = strings.topicStationText;
+            document.getElementById('topicScheduleText').innerHTML = strings.topicScheduleText;
+            document.getElementById('topicEvmText').innerHTML = strings.topicEvmText;
+            // document.getElementById('topicVotingText').innerHTML = strings.topicVotingText;
+            document.getElementById('topicRightsText').innerHTML = strings.topicRightsText;
+
+
+            document.getElementById('messageInput').placeholder = strings.inputPlaceholder;
+            document.getElementById('sendBtn').innerHTML = strings.sendBtn;
+            document.getElementById('voiceBtn').innerHTML = isRecording ? strings.voiceBtnRecording : strings.voiceBtn;
+            document.getElementById('footerHelpline').textContent = strings.footerHelpline;
+
+
+            document.getElementById('footerWebsite').textContent = strings.footerWebsite;
+            document.getElementById('footerPortal').textContent = strings.footerPortal;
+            document.getElementById('speechToggle').setAttribute('aria-label', isSpeechEnabled ? strings.disableSpeech : strings.enableSpeech);
+
+            if (!isInitialLoad) {
+                document.getElementById('messagesContainer').innerHTML = '';
+                fetch('/reset', { method: 'POST' });
+                sendMessageToServer("GREET_USER", true);
+            }
+        }
+        function setupLanguageSwitcher() {
+            document.querySelectorAll('.lang-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const newLang = this.getAttribute('data-lang');
+                    if (newLang === currentLang) return;
+                    document.querySelectorAll('.lang-btn').forEach(btn =>
+                        btn.classList.remove('active'));
+                    this.classList.add('active');
+                    updateUIForLanguage(newLang);
+                });
+            });
+        }
+
+        function setupThemeToggle() {
+            document.getElementById('themeToggle').addEventListener('click', function () {
+                isDarkTheme = !isDarkTheme;
+                document.body.classList.toggle('dark-mode', isDarkTheme);
+                this.innerHTML = isDarkTheme ? '☀' : '🌙';
+            });
+        }
+
+        function setupSpeechToggle() {
+            const speechToggle = document.getElementById('speechToggle');
+            speechToggle.addEventListener('click', () => {
+                isSpeechEnabled = !isSpeechEnabled;
+                speechToggle.classList.toggle('active', isSpeechEnabled);
+                document.getElementById('speechIcon').textContent = isSpeechEnabled ? '🔊' : '🔇';
+                speechToggle.setAttribute('aria-label', isSpeechEnabled ? uiStrings[currentLang]
+                .disableSpeech : uiStrings[currentLang].enableSpeech);
+                const feedbackText = isSpeechEnabled ? uiStrings[currentLang]
+                .speechEnabled : uiStrings[currentLang].speechDisabled;
+                speakText(feedbackText, true);
+            });
+        }
+
+        function speakText(text, isFeedback = false) {
+            if ((!isSpeechEnabled && !isFeedback) || !window.speechSynthesis) return;
+            const cleanText = text.replace(/<[^>]*>|\\|\//g, ' ').replace(/\s+/g, ' ').trim();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(utterance);
+        }
+
+
+        function selectTopic(topicKey) {
+            document.getElementById('messageInput').value = uiStrings[currentLang].questions[topicKey];
+            sendUserMessage();
+        }
+
+        function handleEnterKey(event) { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendUserMessage(); } }
+        function sendUserMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message === '' || isCurrentlyTyping) return;
+            addMessage('user', message);
+            input.value = '';
+
+            sendMessageToServer(message);
+        }
+
+
+        async function sendMessageToServer(message, isInitial = false) {
+            if (!isInitial) showTypingIndicator();
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message, lang: currentLang }),
+
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                if (!isInitial) hideTypingIndicator();
+                const botMessageBubble = addMessage('bot', '', message);
+                const messageContentWrapper = botMessageBubble.querySelector('.message-bubble-content');
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponseText = '';
+                while (true) {
+                    
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    fullResponseText += decoder.decode(value, { stream: true });
+                    messageContentWrapper.innerHTML = formatMessageText(fullResponseText);
+
+                    document.getElementById('messagesContainer').scrollTop = document.getElementById('messagesContainer').scrollHeight;
+                }
+
+                addFeedbackButtons(botMessageBubble);
+                speakText(fullResponseText);
+
+            } catch (error) {
+                console.error('Error:', error);
+                if (!isInitial) hideTypingIndicator();
+                const errorMsg = (currentLang === 'hi') ? '🚫 क्षमा करें, सर्वर से कनेक्ट करने में कोई त्रुटि हुई।' : '🚫 Sorry, an error occurred while connecting to the server.';
+                addMessage('bot', errorMsg);
+            }
+        }
+
+        function addMessage(sender, text, userMessageForContext = '') {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            const avatar = sender === 'user' ? '👤' : '🤖';
+
+            const messageBubble = document.createElement('div');
+            messageBubble.className = 'message-bubble';
+
+            const messageContentWrapper = document.createElement('div');
+            messageContentWrapper.className = 'message-bubble-content';
+
+            messageContentWrapper.innerHTML = formatMessageText(text);
+            messageBubble.appendChild(messageContentWrapper);
+
+            if (sender === 'bot') {
+                messageBubble.dataset.userQuery = userMessageForContext;
+            }
+
+            messageDiv.appendChild(document.createRange().createContextualFragment(`<div class="message-avatar">${avatar}</div>`));
+            messageDiv.appendChild(messageBubble);
+            container.appendChild(messageDiv);
+
+            container.scrollTop = container.scrollHeight;
+            if (sender === 'bot' && text.length > 0) { speakText(text); }
+            return messageBubble;
+        }
+
+        function addFeedbackButtons(bubbleElement) {
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.className = 'feedback-container';
+
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'feedback-controls';
+
+            const positiveBtn = document.createElement('button');
+            positiveBtn.className = 'feedback-btn';
+
+            positiveBtn.innerHTML = '👍';
+            positiveBtn.onclick = () => showFeedbackForm('positive', bubbleElement, controlsDiv);
+
+            const negativeBtn = document.createElement('button');
+            negativeBtn.className = 'feedback-btn';
+            negativeBtn.innerHTML = '👎';
+            negativeBtn.onclick = () => showFeedbackForm('negative', bubbleElement, controlsDiv);
+
+            controlsDiv.appendChild(positiveBtn);
+            controlsDiv.appendChild(negativeBtn);
+
+            const formDiv = document.createElement('div');
+            formDiv.className = 'feedback-form';
+
+            const commentInput = document.createElement('textarea');
+            commentInput.className = 'feedback-input';
+            commentInput.placeholder = uiStrings[currentLang].addComment;
+            commentInput.rows = 2;
+
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'feedback-submit-btn';
+            submitBtn.textContent = uiStrings[currentLang].submitFeedback;
+
+            formDiv.appendChild(commentInput);
+            formDiv.appendChild(submitBtn);
+
+
+            feedbackContainer.appendChild(controlsDiv);
+            feedbackContainer.appendChild(formDiv);
+            bubbleElement.appendChild(feedbackContainer);
+        }
+
+        function showFeedbackForm(feedbackType, bubbleElement, controlsDiv) {
+            controlsDiv.querySelectorAll('.feedback-btn').forEach(btn => {
+                btn.disabled = true;
+                btn.style.cursor = 'default';
+            });
+            const selectedBtn = feedbackType === 'positive' ? controlsDiv.children[0] : controlsDiv.children[1];
+            selectedBtn.classList.add('selected');
+
+            const formDiv = controlsDiv.nextElementSibling;
+            formDiv.classList.add('visible');
+
+            const submitBtn = formDiv.querySelector('.feedback-submit-btn');
+            const commentInput = formDiv.querySelector('.feedback-input');
+
+            submitBtn.onclick = async () => {
+                const userMessage = bubbleElement.dataset.userQuery;
+                const botResponse = bubbleElement.querySelector('.message-bubble-content').innerText;
+                const comment = commentInput.value.trim();
+
+                try {
+                    await fetch('/feedback', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            user_message: userMessage,
+                            bot_response: botResponse,
+                            feedback_type: feedbackType,
+                            comment: comment,
+                            language: currentLang
+                        })
+                    });
+
+                    const thanksMessage = document.createElement('span');
+                    thanksMessage.className = 'feedback-thanks';
+                    thanksMessage.textContent = uiStrings[currentLang].thanksForFeedback;
+                    controlsDiv.parentElement.innerHTML = '';
+                    controlsDiv.parentElement.appendChild(thanksMessage);
+
+                } catch (error) { console.error("Failed to send feedback:", error); }
+            };
+        }
+        function formatMessageText(text) { return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>'); }
+        function showTypingIndicator() {
+
+            if (isCurrentlyTyping) return; isCurrentlyTyping = true;
+            const indicatorDiv = addMessage('bot', '<div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>').parentElement;
+            indicatorDiv.classList.add('typing-indicator');
+        }
+        function hideTypingIndicator() {
+            const indicator = document.querySelector('.typing-indicator');
+            if (indicator) indicator.remove();
+            isCurrentlyTyping = false;
+        }
+        function initializeParticles() {
+            const particlesBg = document.getElementById('particlesBg');
+            const createParticle = () => {
+                const particle = document.createElement('div'); particle.className = 'particle'; particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.width = particle.style.height = (Math.random() * 4 + 2) + 'px'; particle.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's'; particlesBg.appendChild(particle);
+                setTimeout(() => { if (particle.parentNode) particle.parentNode.removeChild(particle); }, 8000);
+            }; setInterval(createParticle, 300);
+        }
+        function updateProgressBar() {
+            let p = 0; setInterval(() => {
+                p = (p + Math.random() * 2) % 100;
+                document.getElementById('progressBar').style.width = p + '%';
+            }, 100);
+        }
+        function toggleTheme() {
+
+            isDarkTheme = !isDarkTheme;
+            document.body.classList.toggle('dark-mode', isDarkTheme);
+            localStorage.setItem('darkMode', isDarkTheme);
+        }
+        function startVoiceRecognition() {
+            if (!('webkitSpeechRecognition' in window)) { return alert('Voice recognition not supported.'); }
+            if (isRecording) return;
+
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-IN';
+            isRecording = true;
+
+            document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtnRecording;
+            recognition.onresult = (event) => { document.getElementById('messageInput').value = event.results[0][0].transcript; };
+            recognition.onend = () => {
+                isRecording = false;
+
+                document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtn;
+                if (document.getElementById('messageInput').value) sendUserMessage();
+            };
+            recognition.onerror = (e) => {
+                console.error("Voice error:", e); isRecording = false;
+                document.getElementById('voiceBtn').innerHTML = uiStrings[currentLang].voiceBtn;
+            };
+            recognition.start();
+        }
+
+    </script>
+<footer style="text-align:center;">
+        © 2025 Team(Parth Shukla, Sirjan Nishad, Divyam Singh,Aashike Navi) Election Advisor. All Rights Reserved.
+    </footer>
+</body>
+
+</html>
