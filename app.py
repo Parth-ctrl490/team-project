@@ -156,7 +156,10 @@ def reset_chat():
 if __name__ == '__main__':
     currentenv = os.environ.get('flaskenv', '').lower()
     production_mode = (currentenv == 'production')
+
+    port = int(os.environ.get('PORT', 5000))  
     app.run(
-        debug=not production_mode,
-        port=5001
+        host="0.0.0.0",  
+        port=port,
+        debug=not production_mode
     )
