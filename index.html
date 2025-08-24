@@ -2,12 +2,43 @@
 <html lang="hi">
 
 <head>
+    <link rel="stylesheet" href="asd.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗳️ भारतीय चुनाव सलाहकार - Interactive Election Guide</title>
+    <title>🗳️ VoteBuddy- Interactive Election Guide</title>
+
+    
+
+  <div style="text-align: center; margin-top: 20px;">
+    
+    <button style="background: linear-gradient(270deg, skyblue, lightgreen, pink, violet, cyan); 
+    border: none; border-radius: 10px; padding: 10px 25px; color: white; font-weight: bolder; 
+    text-shadow: 0 0 5px #fff, 0 0 10px #0ff, 0 0 15px #0ff; transition: transform 0.3s ease, box-shadow 0.3s ease;" @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}.yoyo a {
+    color: white;              
+    text-decoration: none;     
+    display: inline-block;     
+    width: 100%;
+    height: 100%;
+}
+.yoyo a:hover {
+    color: rgb(9, 103, 108);          
+    text-decoration: none;    
+}
+  
+    class="yoyo">
+
+        <a  href="{{ url_for('review') }}">HOME</a>
+    </button>
+</div>
+
     <a href="https://your-feedback-form-link.com" target="_blank" class="feedback-fab"
         title="Kindly share your Feedback">
         💬</a>
+        
     <style>
         .feedback-fab {
             position: fixed;
@@ -1190,17 +1221,16 @@
     </style>
 
     <a href="your-faq-page.html" class="faq-button">❓ FAQs</a>
-
+  
 </head>
 
 <body>
 
 
+
     <a href="https://www.eci.gov.in/faq" target="_blank" rel="noopener noreferrer" class="faq-button">
         🗳️ FAQs
     </a>
-
-
 
     <style>
         @keyframes bounceIn {
@@ -1425,10 +1455,10 @@
 
         const uiStrings = {
             hi: {
-                welcomeTitle: "भारतीय चुनाव सलाहकार",
+                welcomeTitle: "VoteBuddy",
                 welcomeSubtitle: "आपका व्यक्तिगत, स्मार्ट चुनाव सहायक। भारत की चुनावी प्रक्रिया के बारे में सब कुछ जानें।",
                 welcomeButton: "चलिए शुरू करें",
-                title: "🗳️ भारतीय चुनाव सलाहकार",
+                title: "🗳️ VoteBuddy",
 
                 subtitle: "Interactive Election Guide - आपका स्मार्ट चुनाव सहायक",
                 topicsTitle: "🚀 त्वरित चुनाव विषय",
@@ -1470,10 +1500,10 @@
                 submitFeedback: "प्रस्तुत करें"
             },
             en: {
-                welcomeTitle: "Indian Election Advisor",
+                welcomeTitle: "VoteBuddy",
                 welcomeSubtitle: "Your personal, smart election assistant. Learn everything about India's electoral process.",
                 welcomeButton: "Let's Get Started",
-                title: "🗳️ Indian Election Advisor",
+                title: "🗳️ VoteBuddy",
                 subtitle: "Interactive Election Guide - Your Smart Election Assistant",
                 topicsTitle: "🚀 Quick Election Topics",
                 topicRegText: "Voter Registration<br>Voter Registration Process",
@@ -1842,7 +1872,9 @@
         }
 
     </script>
-
+<footer style="text-align:center;">
+        © 2025 Team(Parth Shukla, Sirjan Nishad, Divyam Singh,Aashike Navi) Election Advisor. All Rights Reserved.
+    </footer>
 </body>
 
 </html>
