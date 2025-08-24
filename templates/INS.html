@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🗳️ Indian Election Advisor - Quick Guide</title>
+
+  <style>
+
+    :root{
+      --bg1:#0f2027; --bg2:#203a43; --bg3:#2c5364;
+      --card:rgba(255,255,255,0.08);
+      --border:rgba(255,255,255,0.25);
+      --text:#eaf6ff; --muted:#b9d4ff;
+      --accent1:#7bf4e6; --accent2:#5dcaa7; --accent3:#f6c657; --hot:#ff4d9a;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      min-height:100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background: linear-gradient(120deg,var(--bg1),var(--bg2) 40%,var(--bg3));
+      background-attachment: fixed;
+      line-height:1.65;
+    }
+    .container{
+      width:min(1000px,92vw);
+      margin: 48px auto 80px;
+    }
+
+  
+    h1{
+      margin:0 0 24px;
+      text-align:center;
+      font-size: clamp(28px, 3.6vw, 44px);
+      font-weight: 800;
+      letter-spacing: .5px;
+      background: linear-gradient(90deg, #ffffff, var(--accent1), var(--accent2), var(--accent3), #ffffff);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip:text;
+      color: transparent;
+      animation: shimmer 7s ease-in-out infinite;
+      filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
+    }
+    @keyframes shimmer{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+
+    .sections{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+      gap: 18px;
+    }
+    .section{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 26px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.08);
+      transform: translateY(16px);
+      opacity: 0;
+      animation: rise 0.9s ease forwards;
+    }
+    .section:nth-child(1){animation-delay:.05s}
+    .section:nth-child(2){animation-delay:.15s}
+    .section:nth-child(3){animation-delay:.25s}
+    .section:nth-child(4){animation-delay:.35s}
+    .section:nth-child(5){animation-delay:.45s}
+    .section:nth-child(6){animation-delay:.55s}
+    .section:nth-child(7){animation-delay:.65s}
+    .section:nth-child(8){animation-delay:.75s}
+
+    @keyframes rise{
+      from{transform: translateY(18px) scale(.98); opacity:0}
+      to{transform: translateY(0) scale(1); opacity:1}
+    }
+
+    h2{
+      margin:0 0 10px;
+      font-size: clamp(18px,2.1vw,22px);
+      display:flex; align-items:center; gap:8px;
+      color:#fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,.25);
+    }
+
+    ul{list-style:none; padding-left:0; margin: 10px 0 0}
+    li{
+      position:relative; padding-left:28px; margin: 8px 0;
+      color:var(--muted);
+    }
+    li::before{
+      content:"";
+      position:absolute; left:0; top:8px;
+      width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, var(--accent1), var(--accent2));
+      box-shadow:0 0 12px rgba(123,244,230,.6);
+    }
+ 
+    a{color:var(--accent1); text-decoration:none; border-bottom:1px dashed rgba(123,244,230,.5)}
+    a:hover{border-bottom-color:transparent; filter: brightness(1.15)}
+
+    .note{
+      margin-top:12px;
+      border-radius:14px;
+      padding:12px 14px;
+      background: rgba(255, 243, 205, .1);
+      border: 1px solid rgba(255, 193, 7, .35);
+      color:#ffe9a6;
+      animation: glow 2.2s ease-in-out infinite;
+    }
+    @keyframes glow{
+      0%,100%{box-shadow:0 0 0 rgba(255,199,74,0)}
+      50%{box-shadow:0 0 20px rgba(255,199,74,.25)}
+    }
+
+    .section:hover{
+      transform: translateY(-4px) scale(1.01);
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s;
+      box-shadow: 0 14px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);
+    }
+
+    #toTop{
+      position: fixed; right: 20px; bottom: 22px;
+      padding: 10px 14px; border-radius: 999px;
+      background: linear-gradient(45deg, var(--accent3), var(--accent2), var(--accent1));
+      background-size: 200% 200%;
+      color:#0f172a; font-weight: 800; border:none; cursor:pointer;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      display:none;
+      transition: transform .2s ease, opacity .2s ease;
+      animation: btnGradient 6s ease-in-out infinite alternate;
+    }
+    #toTop:hover{ transform: translateY(-3px) scale(1.04) }
+    @keyframes btnGradient{
+      0%{background-position: 0% 50%}
+      100%{background-position: 100% 50%}
+    }
+
+    .divider{
+      height:1px; width:100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+      margin: 8px 0 26px;
+      opacity:.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🗳️ Indian Election Advisor — Quick Guide</h1>
+    <div class="divider"></div>
+
+    <div class="sections">
+      <div class="section">
+        <h2>🚀 Getting Started</h2>
+        <ul>
+          <li>Tap <b>‘Let’s Get Started’</b></li>
+          <li>AI assistant greets you & lists available help</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>🎛 Interface Controls (Top-right)</h2>
+        <ul>
+          <li>• हिन्दी / English – Change language</li>
+          <li>• 🌙 / ☀️ – Dark/Light mode</li>
+          <li>• 🔇 / 🔊 – Voice on/off</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>📌 Quick Topics</h2>
+        <ul>
+          <li>📝 Voter Registration</li>
+          <li>🆔 EPIC Card</li>
+          <li>📍 Polling Station</li>
+          <li>📅 Election Schedule</li>
+          <li>🗳️ EVM/VVPAT</li>
+          <li>⚖️ Voter Rights</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>💬 Asking Questions</h2>
+        <ul>
+          <li><b>Text:</b> Type in box → Press Enter / 📤 Send</li>
+          <li><b>Voice:</b> 🎤 → Speak (Hindi/English)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>✅ You Can Ask About</h2>
+        <ul>
+          <li>Registration & ID process</li>
+          <li>EPIC card apply/correct</li>
+          <li>Polling location info</li>
+          <li>Election dates & rules</li>
+          <li>EVM usage guide</li>
+          <li>Rights & responsibilities</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>❌ Not Covered</h2>
+        <ul>
+          <li>Non-election topics</li>
+          <li>Legal advice</li>
+          <li>Political endorsements</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>📞 Quick Help</h2>
+        <ul>
+          <li>Helpline: <b>1950</b></li>
+          <li>Website: <a href="https://eci.gov.in" target="_blank">eci.gov.in</a></li>
+          <li>Portal: <a href="https://nvsp.in" target="_blank">nvsp.in</a></li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>🔧 Troubleshooting</h2>
+        <ul>
+          <li>Voice not working → Allow mic permissions</li>
+          <li>Page errors → Refresh / clear cache</li>
+          <li>AI silent → Check internet</li>
+        </ul>
+        <div class="note">💡 Tip: Use keywords like <b>‘voter registration’</b> for best results.</div>
+      </div>
+    </div>
+  </div>
+
+
+  <button id="toTop" aria-label="Back to top">↑ Top</button>
+
+  <script>
+
+    const sections = document.querySelectorAll('.section');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.style.animationPlayState = 'running';
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      })
+    }, {threshold: .12});
+    sections.forEach(s=>io.observe(s));
+
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', ()=>{
+      const show = window.scrollY > 300;
+      toTop.style.display = show ? 'inline-block' : 'none';
+      toTop.style.opacity = show ? '1' : '0';
+    });
+    toTop.addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+  </script>
+</body>
+</html>
