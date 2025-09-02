@@ -52,29 +52,7 @@ team-project/
 
 ---
 
-## 🚀 Installation & Setup (Run Locally)
-
-Install Python Dependencies
-
-pip install -r requirements.txt
-
-
-Set Environment Variables
-Create a .env file in your project root:
-
-OPENAI_API_KEY=your_api_key_here
-FIREBASE_CONFIG=your_firebase_config_json
-SECRET_KEY=your_flask_secret
-
-
-Run the App
-
-flask run
-
-
-Visit http://127.0.0.1:5000 to test locally.
-
-🔮 Planned Features
+## 🔮 Planned Features
 
 📌 Voter Document Upload & AI Verification
 
