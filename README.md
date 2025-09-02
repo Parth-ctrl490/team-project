@@ -54,12 +54,6 @@ team-project/
 
 ## 🚀 Installation & Setup (Run Locally)
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/Parth-ctrl490/team-project.git
-   cd team-project
-
-
 Install Python Dependencies
 
 pip install -r requirements.txt
