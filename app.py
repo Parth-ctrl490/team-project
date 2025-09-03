@@ -16,7 +16,7 @@ if not api_key:
 
 client = Groq(api_key=api_key)
 
-model = os.environ.get("GROQ_MODEL", "llama3-8b-8192")
+model = os.environ.get("GROQ_MODEL", "llama3-8b-8192-v2.0")
 temp = float(os.environ.get("TEMPERATURE", 0.4))
 
 sysprompt = """
@@ -163,3 +163,4 @@ if __name__ == '__main__':
         port=port,
         debug=not production_mode
     )
+
